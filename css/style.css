@@ -1,0 +1,67 @@
+/* ==== Variables de color accesibles ==== */
+:root {
+    --color-fondo: #F5F9FD;
+    --color-fondo-secundario: #2B6CB0;
+    --color-fondo-terciario: #F59E0B;
+    --color-texto-primario: #FFFFFF;
+    --color-texto-titulo: #1E4E8C;
+    --color-foco: #ffbf47;
+    --fuente-base: 'Montserrat', sans-serif;
+}
+  
+html {
+    font-size: 100%; /* Esto serían 16px */
+    scroll-behavior: smooth;
+}
+  
+body {
+    font-family: var(--fuente-base);
+    color: var(--color-texto);
+    background-color: var(--color-fondo);
+    line-height: 1.6;
+    font-size: 1rem;
+    padding: 0;
+    margin: 0;
+}
+  
+/* Para el enfoque */
+:focus-visible {
+    outline: 3px solid var(--color-foco);
+    outline-offset: 2px;
+}
+  
+/* Para el salto de contenido */
+.skip-link {
+    position: absolute;
+    left: -999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    z-index: 100;
+}
+  
+.skip-link:focus {
+    left: 1rem;
+    top: 1rem;
+    width: auto;
+    height: auto;
+    padding: 0.5rem 1rem;
+    background: var(--color-foco);
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+}
+  
+/* Para que las imagenes sean accesibles */
+img {
+    max-width: 100%;
+    height: auto;
+}
+  
+/* Bootstrap overrides opcionales */
+.btn:focus-visible {
+    box-shadow: 0 0 0 0.25rem rgba(255, 191, 71, 0.5); /* Para un color de foco accesible :) */
+}
+  

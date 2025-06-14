@@ -98,33 +98,6 @@
           </div>
         </div>
         <div class="mb-3">
-          <h3 class="h6">Caminos seguros</h3>
-          <div class="form-check">
-            <input
-              type="checkbox"
-              class="form-check-input"
-              id="rutas-principales"
-              checked
-            />
-            <label class="form-check-label" for="rutas-principales"
-              >Rutas principales
-              <span class="text-success" aria-hidden="true">─</span></label
-            >
-          </div>
-          <div class="form-check">
-            <input
-              type="checkbox"
-              class="form-check-input"
-              id="rutas-alternativas"
-              checked
-            />
-            <label class="form-check-label" for="rutas-alternativas"
-              >Rutas alternativas
-              <span class="text-primary" aria-hidden="true">─</span></label
-            >
-          </div>
-        </div>
-        <div class="mb-3">
           <h3 class="h6">Puntos de interés</h3>
           <div class="form-check">
             <input
@@ -206,14 +179,6 @@
             <span class="text-success" aria-hidden="true">●</span> Zona de
             riesgo bajo
           </li>
-          <li>
-            <span class="text-success" aria-hidden="true">─</span> Ruta
-            principal segura
-          </li>
-          <li>
-            <span class="text-primary" aria-hidden="true">─</span> Ruta
-            alternativa
-          </li>
           <li><span class="bi bi-house" aria-hidden="true"></span> Refugio</li>
           <li>
             <span class="bi bi-geo-alt" aria-hidden="true"></span> Punto de
@@ -244,13 +209,13 @@
         maxZoom: 19,
       }).addTo(map);
 
-      // Sample GeoJSON data (replace with real data)
+      // Sample GeoJSON data for flood zones
       var geojsonData = {
         type: "FeatureCollection",
         features: [
           {
             type: "Feature",
-            properties: { risk: "high" },
+            properties: { risk: "alto" },
             geometry: {
               type: "Polygon",
               coordinates: [
@@ -266,7 +231,7 @@
           },
           {
             type: "Feature",
-            properties: { risk: "medium" },
+            properties: { risk: "medio" },
             geometry: {
               type: "Polygon",
               coordinates: [
@@ -282,7 +247,7 @@
           },
           {
             type: "Feature",
-            properties: { risk: "low" },
+            properties: { risk: "bajo" },
             geometry: {
               type: "Polygon",
               coordinates: [
@@ -299,23 +264,68 @@
         ],
       };
 
-      var geojsonLayer = L.geoJSON(geojsonData, {
-        style: function (feature) {
-          switch (feature.properties.risk) {
-            case "high":
-              return { color: "#dc3545", fillOpacity: 0.5 };
-            case "medium":
-              return { color: "#ffc107", fillOpacity: 0.5 };
-            case "low":
-              return { color: "#28a745", fillOpacity: 0.5 };
-          }
-        },
-      }).addTo(map);
+      // Style function for flood zones
+      function getColor(risk) {
+        return risk === "alto"
+          ? "#dc3545"
+          : risk === "medio"
+            ? "#ffc107"
+            : "#28a745";
+      }
+
+      // Create separate layers for each risk level
+      var geojsonLayers = {
+        alto: L.geoJSON(geojsonData, {
+          style: function (feature) {
+            return {
+              color: getColor(feature.properties.risk),
+              fillColor: getColor(feature.properties.risk),
+              fillOpacity: document.getElementById("alto-riesgo").checked
+                ? 0.5
+                : 0,
+              weight: 1,
+            };
+          },
+          filter: function (feature) {
+            return feature.properties.risk === "alto";
+          },
+        }).addTo(map),
+        medio: L.geoJSON(geojsonData, {
+          style: function (feature) {
+            return {
+              color: getColor(feature.properties.risk),
+              fillColor: getColor(feature.properties.risk),
+              fillOpacity: document.getElementById("riesgo-medio").checked
+                ? 0.5
+                : 0,
+              weight: 1,
+            };
+          },
+          filter: function (feature) {
+            return feature.properties.risk === "medio";
+          },
+        }).addTo(map),
+        bajo: L.geoJSON(geojsonData, {
+          style: function (feature) {
+            return {
+              color: getColor(feature.properties.risk),
+              fillColor: getColor(feature.properties.risk),
+              fillOpacity: document.getElementById("riesgo-bajo").checked
+                ? 0.5
+                : 0,
+              weight: 1,
+            };
+          },
+          filter: function (feature) {
+            return feature.properties.risk === "bajo";
+          },
+        }).addTo(map),
+      };
 
       // Sample markers
       var markers = [
         {
-          type: "refugio",
+          type: "refugios",
           coords: [-34.92, -57.95],
           icon: L.divIcon({
             className: "bi bi-house",
@@ -323,7 +333,7 @@
           }),
         },
         {
-          type: "punto-encuentro",
+          type: "puntos-encuentro",
           coords: [-34.91, -57.94],
           icon: L.divIcon({
             className: "bi bi-geo-alt",
@@ -331,42 +341,91 @@
           }),
         },
         {
-          type: "centro-asistencia",
+          type: "centros-asistencia",
           coords: [-34.93, -57.96],
           icon: L.divIcon({
             className: "bi bi-plus-square",
             html: '<i class="bi bi-plus-square"></i>',
           }),
         },
-      ].forEach((marker) =>
-        L.marker(marker.coords, { icon: marker.icon }).addTo(map),
-      );
+      ].map((marker) => {
+        return L.marker(marker.coords, { icon: marker.icon });
+      });
 
-      // Filter functions
+      // Assign types to markers and add to map
+      markers.forEach((marker) => {
+        marker.type = marker.options.icon.options.className.split(" ")[1]; // Extract type from className
+        marker.addTo(map);
+      });
+
+      // Group markers by type for filtering
+      var markerLayers = {
+        refugios: L.layerGroup(markers.filter((m) => m.type === "refugios")),
+        "puntos-encuentro": L.layerGroup(
+          markers.filter((m) => m.type === "puntos-encuentro"),
+        ),
+        "centros-asistencia": L.layerGroup(
+          markers.filter((m) => m.type === "centros-asistencia"),
+        ),
+      };
+
+      // Add marker layers to map
+      Object.values(markerLayers).forEach((layer) => layer.addTo(map));
+
+      // Filter function
       function applyFilters() {
         var filters = {
           "alto-riesgo": document.getElementById("alto-riesgo").checked,
           "riesgo-medio": document.getElementById("riesgo-medio").checked,
           "riesgo-bajo": document.getElementById("riesgo-bajo").checked,
-          "rutas-principales":
-            document.getElementById("rutas-principales").checked,
-          "rutas-alternativas":
-            document.getElementById("rutas-alternativas").checked,
           refugios: document.getElementById("refugios").checked,
           "puntos-encuentro":
             document.getElementById("puntos-encuentro").checked,
           "centros-asistencia":
             document.getElementById("centros-asistencia").checked,
         };
-        console.log(filters); // Replace with actual filter logic
+
+        geojsonLayers["alto"].eachLayer(function (layer) {
+          layer.setStyle({
+            fillOpacity: filters["alto-riesgo"] ? 0.5 : 0,
+            weight: filters["alto-riesgo"] ? 1 : 0,
+          });
+        });
+        geojsonLayers["medio"].eachLayer(function (layer) {
+          layer.setStyle({
+            fillOpacity: filters["riesgo-medio"] ? 0.5 : 0,
+            weight: filters["riesgo-medio"] ? 1 : 0,
+          });
+        });
+        geojsonLayers["bajo"].eachLayer(function (layer) {
+          layer.setStyle({
+            fillOpacity: filters["riesgo-bajo"] ? 0.5 : 0,
+            weight: filters["riesgo-bajo"] ? 1 : 0,
+          });
+        });
+
+        Object.keys(markerLayers).forEach((type) => {
+          markerLayers[type].eachLayer((layer) => {
+            layer.getElement().style.display = filters[type] ? "block" : "none";
+          });
+        });
       }
 
+      // Reset function
       function resetFilters() {
         document
           .querySelectorAll(".form-check-input")
           .forEach((cb) => (cb.checked = true));
         applyFilters();
       }
+
+      // Initial application of filters
+      applyFilters();
+
+      // Add event listeners for real-time filtering
+      document.querySelectorAll(".form-check-input").forEach((cb) => {
+        cb.addEventListener("change", applyFilters);
+      });
     </script>
   </body>
 </html>

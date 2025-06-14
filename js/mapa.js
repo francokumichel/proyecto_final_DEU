@@ -118,8 +118,8 @@ var geojsonLayers = {
   }).addTo(map),
 };
 
-// Sample markers
-var markers = [
+// Agrupamos los datos por tipo
+var markerData = [
   {
     type: "refugios",
     coords: [-34.92, -57.95],
@@ -144,29 +144,24 @@ var markers = [
       html: '<i class="bi bi-plus-square"></i>',
     }),
   },
-].map((marker) => {
-  return L.marker(marker.coords, { icon: marker.icon });
-});
+];
 
-// Assign types to markers and add to map
-markers.forEach((marker) => {
-  marker.type = marker.options.icon.options.className.split(" ")[1]; // Extract type from className
-  marker.addTo(map);
-});
-
-// Group markers by type for filtering
+// Creamos los grupos de marcadores
 var markerLayers = {
-  refugios: L.layerGroup(markers.filter((m) => m.type === "refugios")),
-  "puntos-encuentro": L.layerGroup(
-    markers.filter((m) => m.type === "puntos-encuentro"),
-  ),
-  "centros-asistencia": L.layerGroup(
-    markers.filter((m) => m.type === "centros-asistencia"),
-  ),
+  refugios: L.layerGroup(),
+  "puntos-encuentro": L.layerGroup(),
+  "centros-asistencia": L.layerGroup(),
 };
 
-// Add marker layers to map
-Object.values(markerLayers).forEach((layer) => layer.addTo(map));
+// Creamos y agregamos los marcadores a sus grupos
+markerData.forEach((data) => {
+  const marker = L.marker(data.coords, { icon: data.icon });
+  markerLayers[data.type].addLayer(marker);
+});
+
+// Agregamos todos los grupos al mapa inicialmente
+Object.values(markerLayers).forEach((layer) => map.addLayer(layer));
+
 
 // Filter function
 function applyFilters() {
@@ -201,9 +196,11 @@ function applyFilters() {
   });
 
   Object.keys(markerLayers).forEach((type) => {
-    markerLayers[type].eachLayer((layer) => {
-      layer.getElement().style.display = filters[type] ? "block" : "none";
-    });
+    if (filters[type]) {
+      map.addLayer(markerLayers[type]);
+    } else {
+      map.removeLayer(markerLayers[type]);
+    }
   });
 }
 

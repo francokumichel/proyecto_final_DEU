@@ -12,6 +12,10 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
     <style>
       .map-container {
         height: 80vh;
@@ -31,6 +35,10 @@
       }
       .high-contrast {
         filter: contrast(1.5);
+      }
+      #map {
+        height: 100%;
+        width: 100%;
       }
     </style>
   </head>
@@ -163,10 +171,18 @@
             value="2023-06-15"
           />
         </div>
-        <button class="btn btn-primary w-100" type="button">
+        <button
+          class="btn btn-primary w-100"
+          type="button"
+          onclick="applyFilters()"
+        >
           Aplicar filtros
         </button>
-        <button class="btn btn-outline-secondary w-100 mt-2" type="button">
+        <button
+          class="btn btn-outline-secondary w-100 mt-2"
+          type="button"
+          onclick="resetFilters()"
+        >
           Restablecer filtros
         </button>
       </div>
@@ -210,17 +226,147 @@
         </ul>
       </div>
 
-      <!-- Placeholder for map content -->
       <div
+        id="map"
         class="high-contrast"
-        style="height: 100%; background: #e0e0e0"
         aria-label="Mapa interactivo"
         tabindex="0"
-      >
-        <!-- Map content would be added here with a real mapping library like Leaflet -->
-      </div>
+      ></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      // Initialize the map
+      var map = L.map("map").setView([-34.92, -57.95], 12); // Approximate coordinates for Villa Elvira, Argentina
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+      }).addTo(map);
+
+      // Sample GeoJSON data (replace with real data)
+      var geojsonData = {
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            properties: { risk: "high" },
+            geometry: {
+              type: "Polygon",
+              coordinates: [
+                [
+                  [-57.96, -34.93],
+                  [-57.94, -34.93],
+                  [-57.94, -34.91],
+                  [-57.96, -34.91],
+                  [-57.96, -34.93],
+                ],
+              ],
+            },
+          },
+          {
+            type: "Feature",
+            properties: { risk: "medium" },
+            geometry: {
+              type: "Polygon",
+              coordinates: [
+                [
+                  [-57.95, -34.92],
+                  [-57.93, -34.92],
+                  [-57.93, -34.9],
+                  [-57.95, -34.9],
+                  [-57.95, -34.92],
+                ],
+              ],
+            },
+          },
+          {
+            type: "Feature",
+            properties: { risk: "low" },
+            geometry: {
+              type: "Polygon",
+              coordinates: [
+                [
+                  [-57.97, -34.94],
+                  [-57.95, -34.94],
+                  [-57.95, -34.92],
+                  [-57.97, -34.92],
+                  [-57.97, -34.94],
+                ],
+              ],
+            },
+          },
+        ],
+      };
+
+      var geojsonLayer = L.geoJSON(geojsonData, {
+        style: function (feature) {
+          switch (feature.properties.risk) {
+            case "high":
+              return { color: "#dc3545", fillOpacity: 0.5 };
+            case "medium":
+              return { color: "#ffc107", fillOpacity: 0.5 };
+            case "low":
+              return { color: "#28a745", fillOpacity: 0.5 };
+          }
+        },
+      }).addTo(map);
+
+      // Sample markers
+      var markers = [
+        {
+          type: "refugio",
+          coords: [-34.92, -57.95],
+          icon: L.divIcon({
+            className: "bi bi-house",
+            html: '<i class="bi bi-house"></i>',
+          }),
+        },
+        {
+          type: "punto-encuentro",
+          coords: [-34.91, -57.94],
+          icon: L.divIcon({
+            className: "bi bi-geo-alt",
+            html: '<i class="bi bi-geo-alt"></i>',
+          }),
+        },
+        {
+          type: "centro-asistencia",
+          coords: [-34.93, -57.96],
+          icon: L.divIcon({
+            className: "bi bi-plus-square",
+            html: '<i class="bi bi-plus-square"></i>',
+          }),
+        },
+      ].forEach((marker) =>
+        L.marker(marker.coords, { icon: marker.icon }).addTo(map),
+      );
+
+      // Filter functions
+      function applyFilters() {
+        var filters = {
+          "alto-riesgo": document.getElementById("alto-riesgo").checked,
+          "riesgo-medio": document.getElementById("riesgo-medio").checked,
+          "riesgo-bajo": document.getElementById("riesgo-bajo").checked,
+          "rutas-principales":
+            document.getElementById("rutas-principales").checked,
+          "rutas-alternativas":
+            document.getElementById("rutas-alternativas").checked,
+          refugios: document.getElementById("refugios").checked,
+          "puntos-encuentro":
+            document.getElementById("puntos-encuentro").checked,
+          "centros-asistencia":
+            document.getElementById("centros-asistencia").checked,
+        };
+        console.log(filters); // Replace with actual filter logic
+      }
+
+      function resetFilters() {
+        document
+          .querySelectorAll(".form-check-input")
+          .forEach((cb) => (cb.checked = true));
+        applyFilters();
+      }
+    </script>
   </body>
 </html>

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proponer Datos</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1 class="h3 mb-4">Proponer datos</h1>
+      <p class="text-muted">
+        Ayuda a mejorar la información actualizada comparendo tus observaciones
+        sobre inundaciones.
+      </p>
+      <p class="text-danger">* Significa obligatorio</p>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="list-group">
+            <a
+              href="#"
+              class="list-group-item list-group-item-action active"
+              aria-label="Formulario de reporte"
+              aria-current="true"
+            >
+              <span class="me-2">📋</span> Pautas
+            </a>
+            <a
+              href="#"
+              class="list-group-item list-group-item-action"
+              aria-label="Preguntas frecuentes"
+            >
+              <span class="me-2">❓</span> Preguntas frecuentes
+            </a>
+            <a
+              href="#"
+              class="list-group-item list-group-item-action"
+              aria-label="Contacto"
+            >
+              <span class="me-2">📞</span> Contacto
+            </a>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <form>
+            <div class="mb-3">
+              <label for="reportType" class="form-label"
+                >Tipo de reporte *</label
+              >
+              <select class="form-select" id="reportType" aria-required="true">
+                <option value="nueva">Nueva inundación</option>
+                <option value="actualizacion">Actualización</option>
+                <option value="conexion">Conexión</option>
+              </select>
+              <small class="text-muted"
+                >Por favor, selecciona o cambia la opción si aplica.</small
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="location" class="form-label">Ubicación *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="location"
+                aria-required="true"
+                placeholder="Ej.: Calle Principal, No. 123"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="municipality" class="form-label">Municipio</label>
+              <input
+                type="text"
+                class="form-control"
+                id="municipality"
+                placeholder="Ej.: Ciudad Ejemplo"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="coordinates" class="form-label"
+                >Coordenadas (opcional)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="coordinates"
+                placeholder="Ej.: Lat: -34.6037, Long: -58.3816"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label"
+                >Aquí clic para seleccionar ubicación en el mapa</label
+              >
+              <div
+                class="border p-3 text-center bg-light"
+                style="height: 150px"
+                tabindex="0"
+                aria-label="Placeholder para mapa"
+              >
+                [Mapa Placeholder]
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="floodDetails" class="form-label"
+                >Detalles de la inundación *</label
+              >
+              <textarea
+                class="form-control"
+                id="floodDetails"
+                rows="3"
+                aria-required="true"
+                placeholder="Ej.: Fecha: DD/MM/AAAA, Hora: HH:MM, Nivel del agua: XXcm"
+              ></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="attachments" class="form-label"
+                >Adjuntar fotos o videos (opcional)</label
+              >
+              <input
+                type="file"
+                class="form-control"
+                id="attachments"
+                accept="image/*,video/*"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="contactInfo" class="form-label"
+                >Información de contacto (opcional)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="contactInfo"
+                placeholder="Ej.: Nombre o correo@example.com"
+              />
+            </div>
+
+            <div class="mb-3 form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="terms"
+                required
+              />
+              <label class="form-check-label" for="terms"
+                >Acepto las condiciones y políticas</label
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <button type="button" class="btn btn-secondary ms-2">
+              Cancelar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

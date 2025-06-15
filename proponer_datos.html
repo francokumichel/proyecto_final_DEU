@@ -91,7 +91,7 @@
                   <a href="mailto:soporte@infoinundaciones.org"
                     >soporte@infoinundaciones.org</a
                   ><br />
-                  📞 <a href="tel:+541145678900">(011) 4567-8900</a>
+                  📞 <a href="tel:+54022145678900">(011) 4567-8900</a>
                 </p>
               </div>
             </div>
@@ -104,13 +104,22 @@
               <label for="reportType" class="form-label"
                 >Tipo de reporte *</label
               >
-              <select class="form-select" id="reportType" required>
+              <select
+                class="form-select"
+                id="reportType"
+                required
+                aria-describedby="reportTypeHelp"
+              >
+                <option value="" disabled selected>
+                  Seleccione tipo de reporte
+                </option>
+
                 <option value="nueva">Nueva inundación</option>
                 <option value="actualizacion">Actualización</option>
                 <option value="conexion">Posible inundación</option>
               </select>
-              <small class="text-muted"
-                >Por favor, selecciona o cambia la opción si aplica.</small
+              <small id="reportTypeHelp" class="text-muted"
+                >Por favor, seleccione o cambie la opción si aplica.</small
               >
             </div>
 
@@ -144,6 +153,7 @@
                 class="border p-3"
                 style="height: 300px"
                 tabindex="0"
+                role="region"
                 aria-label="Mapa interactivo para seleccionar ubicación"
               ></div>
             </div>

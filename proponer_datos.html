@@ -8,6 +8,13 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
   </head>
   <body>
     <div class="container mt-5">
@@ -41,7 +48,7 @@
               <select class="form-select" id="reportType" required>
                 <option value="nueva">Nueva inundación</option>
                 <option value="actualizacion">Actualización</option>
-                <option value="conexion">Conexión</option>
+                <option value="conexion">Posible inundación</option>
               </select>
               <small class="text-muted"
                 >Por favor, selecciona o cambia la opción si aplica.</small
@@ -71,16 +78,28 @@
 
             <div class="mb-3">
               <label class="form-label"
-                >Aquí clic para seleccionar ubicación en el mapa</label
+                >Clic en el mapa para seleccionar ubicación</label
               >
               <div
-                class="border p-3 text-center bg-light"
-                style="height: 150px"
+                id="map"
+                class="border p-3"
+                style="height: 300px"
                 tabindex="0"
-                aria-label="Placeholder para mapa"
+                aria-label="Mapa interactivo para seleccionar ubicación"
+              ></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="coordinates" class="form-label"
+                >Coordenadas seleccionadas</label
               >
-                [Mapa Placeholder]
-              </div>
+              <input
+                type="text"
+                class="form-control"
+                id="coordinates"
+                readonly
+                placeholder="Latitud, Longitud (seleccionadas en el mapa)"
+              />
             </div>
 
             <div class="mb-3">
@@ -141,6 +160,40 @@
       </div>
     </div>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet JS -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script>
+      // Initialize Leaflet map centered on La Plata, Argentina
+      const map = L.map("map").setView([-34.921, -57.954], 12); // La Plata coordinates, zoom level 12
+
+      // Add OpenStreetMap tiles
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      // Variable to store the marker
+      let marker = null;
+
+      // Add click event to place a marker
+      map.on("click", function (e) {
+        // Remove previous marker if it exists
+        if (marker) {
+          map.removeLayer(marker);
+        }
+        // Add new marker at clicked location
+        marker = L.marker(e.latlng).addTo(map);
+        // Update coordinates input with lat/lng
+        document.getElementById("coordinates").value = `${e.latlng.lat.toFixed(
+          6,
+        )}, ${e.latlng.lng.toFixed(6)}`;
+      });
+    </script>
   </body>
 </html>

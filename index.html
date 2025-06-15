@@ -19,6 +19,8 @@
     rel="stylesheet"
   />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <script src="js/navbar-component.js" defer></script>
 </head>
 
 <body>
@@ -26,8 +28,8 @@
   <a href="#main-content" class="skip-link">Presiona aca dale, no seas cagón</a>
 
   <!-- Encabezado -->
-  <header class="bg-primary text-white p-3" role="banner">
-    <p>Soy un nav</p>
+  <header role="banner">
+    <navbar-component></navbar-component>
   </header>
 
   <!-- Contenido principal -->
@@ -45,5 +47,7 @@
 
   <!-- Por si manijeamos con js -->
   <script src="js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
 </body>
 </html>

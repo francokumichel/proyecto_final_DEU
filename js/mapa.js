@@ -173,16 +173,16 @@ function applyFilters() {
 
 // Inicialización
 document.addEventListener("DOMContentLoaded", function() {
-  initLayers(); // <- ¡Nueva función para carga inicial!
-  applyFilters(); // Aplicar filtros (redundante pero seguro)
+  initLayers();
+  applyFilters();
 
   // Event listeners
   document.querySelectorAll(".form-check-input").forEach(cb => {
     cb.addEventListener("change", applyFilters);
   });
-
-  document.getElementById("reset-filters").addEventListener("click", function() {
-    document.querySelectorAll(".form-check-input").forEach(cb => cb.checked = true);
-    applyFilters();
-  });
 });
+
+function resetFilters() {
+  document.querySelectorAll(".form-check-input").forEach(cb => cb.checked = true);
+  applyFilters();
+}

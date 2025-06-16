@@ -10,7 +10,7 @@
 }
   
 html {
-    font-size: 100%; /* Esto serían 16px */
+    font-size: 16px; /* Esto serían 16px */
     scroll-behavior: smooth;
 }
   
@@ -64,4 +64,16 @@ img {
 /* Bootstrap overrides opcionales */
 .btn:focus-visible {
     box-shadow: 0 0 0 0.25rem rgba(255, 191, 71, 0.5); /* Para un color de foco accesible :) */
+}
+
+@media (max-width: 576px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 420px) {
+    html {
+        font-size: 10px;
+    }
 }

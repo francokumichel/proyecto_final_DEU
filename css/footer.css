@@ -1,0 +1,7 @@
+footer.footer {
+  background-color: var(--color-fondo-secundario);
+}
+
+footer.footer a:hover {
+  text-decoration: underline;
+}

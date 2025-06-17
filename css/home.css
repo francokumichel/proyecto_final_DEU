@@ -1,0 +1,60 @@
+.hero-section {
+  background: linear-gradient(
+    270deg,
+    rgba(43, 108, 176, 1) 0%,
+    rgba(30, 78, 140, 1) 100%
+  );
+  padding: 40px 20px;
+  color: #ffffff;
+}
+
+.hero-title {
+  color: #ffffff;
+  font-size: 2.5rem;
+}
+
+.hero-description {
+  color: #e3f2fd;
+  font-size: 1.125rem;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+.btn-map {
+  background-color: #ffffff;
+  color: #2b6cb0;
+  border: none;
+}
+
+.btn-map:hover {
+  background-color: #f0f0f0;
+  color: #2b6cb0;
+}
+
+.btn-map:focus-visible {
+  outline: 3px solid #ffbf47;
+  outline-offset: 3px;
+}
+
+.btn-report {
+  background-color: #f59e0b;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-report:hover {
+  background-color: #d98206;
+  color: #ffffff;
+}
+
+.btn-report:focus-visible {
+  outline: 3px solid #ffbf47;
+  outline-offset: 3px;
+}
+
+/* Iconos dentro de botones */
+.btn-map img,
+.btn-report img {
+  width: 20px;
+  height: 20px;
+}

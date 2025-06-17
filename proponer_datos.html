@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proponer Datos</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <script src="js/navbar-component.js" defer></script>
+  </head>
+  <body>
+    <navbar-component></navbar-component>
+    <div class="container mt-5">
+      <h1 class="h3 mb-4">Proponer datos</h1>
+      <p class="text-muted">
+        Ayudá a mejorar la información actualizada comparendo tus observaciones
+        sobre inundaciones.
+      </p>
+      <p class="text-danger">* Significa obligatorio</p>
+
+      <div class="row">
+        <div class="col-md-3">
+          <button
+            class="btn btn-outline-secondary w-100 mb-2"
+            data-bs-toggle="collapse"
+            data-bs-target="#sidebarHelp"
+            aria-expanded="true"
+            aria-controls="sidebarHelp"
+          >
+            Mostrar/Ocultar ayuda
+          </button>
+
+          <div class="collapse show" id="sidebarHelp">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="bi bi-info-circle-fill me-2"></i> Pautas para
+                  reportar
+                </h5>
+                <ul class="list-unstyled">
+                  <li>✅ Sea preciso con la ubicación y los detalles.</li>
+                  <li>✅ Reporte información verificable y actual.</li>
+                  <li>✅ Evite incluir datos personales de terceros.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="bi bi-question-circle-fill me-2"></i> Preguntas
+                  frecuentes
+                </h5>
+                <p class="mb-1">
+                  <strong>¿Puedo reportar anónimamente?</strong><br />
+                  Sí, el contacto es opcional y solo se usa para verificación.
+                </p>
+                <p class="mb-1">
+                  <strong>¿Cómo se verifica la información?</strong><br />
+                  Se compara con otros reportes, imágenes satelitales y datos
+                  oficiales.
+                </p>
+                <a href="#" class="text-primary">Ver todas las preguntas</a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="bi bi-telephone-fill me-2"></i> ¿Necesita ayuda?
+                </h5>
+                <p class="mb-1">Si tiene problemas para enviar su reporte:</p>
+                <p class="mb-1">
+                  📧
+                  <a href="mailto:soporte@infoinundaciones.org"
+                    >soporte@infoinundaciones.org</a
+                  ><br />
+                  📞 <a href="tel:+54022145678900">(0221) 4567-8900</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-9">
+          <form>
+            <div class="mb-3">
+              <label for="reportType" class="form-label"
+                >Tipo de reporte *</label
+              >
+              <select
+                class="form-select"
+                id="reportType"
+                required
+                aria-describedby="reportTypeHelp"
+              >
+                <option value="" disabled selected>
+                  Seleccione tipo de reporte
+                </option>
+
+                <option value="nueva">Nueva inundación</option>
+                <option value="actualizacion">Actualización</option>
+                <option value="conexion">Posible inundación</option>
+              </select>
+              <small id="reportTypeHelp" class="text-muted"
+                >Por favor, seleccione o cambie la opción si aplica.</small
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="location" class="form-label">Ubicación *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="location"
+                required
+                placeholder="Ej.: Calle Principal, No. 123"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="municipality" class="form-label">Municipio</label>
+              <input
+                type="text"
+                class="form-control"
+                id="municipality"
+                placeholder="Ej.: Ciudad Ejemplo"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label"
+                >Clic en el mapa para seleccionar ubicación</label
+              >
+              <div
+                id="map"
+                class="border p-3"
+                style="height: 300px"
+                tabindex="0"
+                role="region"
+                aria-label="Mapa interactivo para seleccionar ubicación"
+              ></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="coordinates" class="form-label"
+                >Coordenadas seleccionadas</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="coordinates"
+                readonly
+                placeholder="Latitud, Longitud (seleccionadas en el mapa)"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="floodDetails" class="form-label"
+                >Detalles de la inundación *</label
+              >
+              <textarea
+                class="form-control"
+                id="floodDetails"
+                rows="3"
+                required
+                placeholder="Ej.: Fecha: DD/MM/AAAA, Hora: HH:MM, Nivel del agua: XXcm"
+              ></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="attachments" class="form-label"
+                >Adjuntar fotos o videos (opcional)</label
+              >
+              <input
+                type="file"
+                class="form-control"
+                id="attachments"
+                accept="image/*,video/*"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="contactInfo" class="form-label"
+                >Información de contacto (opcional)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="contactInfo"
+                placeholder="Ej.: Nombre o correo@example.com"
+              />
+            </div>
+
+            <div class="mb-3 form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="terms"
+                required
+              />
+              <label class="form-check-label" for="terms"
+                >Acepto los términos y condiciones</label
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <button type="button" class="btn btn-secondary ms-2">
+              Cancelar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    &nbsp;
+
+    <!-- Footer -->
+    <footer-component></footer-component>
+
+    <script src="js/footer-component.js" defer></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet JS -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script>
+      // Initialize Leaflet map centered on La Plata, Argentina
+      const map = L.map("map").setView([-34.921, -57.954], 12); // La Plata coordinates, zoom level 12
+
+      // Add OpenStreetMap tiles
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      // Variable to store the marker
+      let marker = null;
+
+      // Add click event to place a marker
+      map.on("click", function (e) {
+        // Remove previous marker if it exists
+        if (marker) {
+          map.removeLayer(marker);
+        }
+        // Add new marker at clicked location
+        marker = L.marker(e.latlng).addTo(map);
+        // Update coordinates input with lat/lng
+        document.getElementById("coordinates").value = `${e.latlng.lat.toFixed(
+          6,
+        )}, ${e.latlng.lng.toFixed(6)}`;
+      });
+    </script>
+  </body>
+</html>

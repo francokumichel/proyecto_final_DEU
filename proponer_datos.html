@@ -25,17 +25,25 @@
     <script src="js/navbar-component.js" defer></script>
   </head>
   <body>
-    <navbar-component></navbar-component>
-    <div class="container mt-5">
-      <h1 class="h3 mb-4">Proponer datos</h1>
-      <p class="text-muted">
-        Ayudá a mejorar la información actualizada comparendo tus observaciones
-        sobre inundaciones.
-      </p>
-      <p class="text-danger">* Significa obligatorio</p>
+    <!-- Header with navigation -->
+    <header>
+      <navbar-component></navbar-component>
+    </header>
+
+    <!-- Main content -->
+    <main class="container mt-5">
+      <header>
+        <h1 class="h3 mb-4">Proponer datos</h1>
+        <p class="text-muted">
+          Ayudá a mejorar la información actualizada compartiendo tus
+          observaciones sobre inundaciones.
+        </p>
+        <p class="text-danger">* Significa obligatorio</p>
+      </header>
 
       <div class="row">
-        <div class="col-md-3">
+        <!-- Sidebar with help content -->
+        <aside class="col-md-3">
           <button
             class="btn btn-outline-secondary w-100 mb-2"
             data-bs-toggle="collapse"
@@ -46,27 +54,27 @@
             Mostrar/Ocultar ayuda
           </button>
 
-          <div class="collapse show" id="sidebarHelp">
-            <div class="card mb-3">
+          <section class="collapse show" id="sidebarHelp">
+            <article class="card mb-3">
               <div class="card-body">
-                <h5 class="card-title">
+                <h2 class="card-title h5">
                   <i class="bi bi-info-circle-fill me-2"></i> Pautas para
                   reportar
-                </h5>
+                </h2>
                 <ul class="list-unstyled">
                   <li>✅ Sea preciso con la ubicación y los detalles.</li>
                   <li>✅ Reporte información verificable y actual.</li>
                   <li>✅ Evite incluir datos personales de terceros.</li>
                 </ul>
               </div>
-            </div>
+            </article>
 
-            <div class="card mb-3">
+            <article class="card mb-3">
               <div class="card-body">
-                <h5 class="card-title">
+                <h2 class="card-title h5">
                   <i class="bi bi-question-circle-fill me-2"></i> Preguntas
                   frecuentes
-                </h5>
+                </h2>
                 <p class="mb-1">
                   <strong>¿Puedo reportar anónimamente?</strong><br />
                   Sí, el contacto es opcional y solo se usa para verificación.
@@ -78,13 +86,13 @@
                 </p>
                 <a href="#" class="text-primary">Ver todas las preguntas</a>
               </div>
-            </div>
+            </article>
 
-            <div class="card">
+            <article class="card">
               <div class="card-body">
-                <h5 class="card-title">
+                <h2 class="card-title h5">
                   <i class="bi bi-telephone-fill me-2"></i> ¿Necesita ayuda?
-                </h5>
+                </h2>
                 <p class="mb-1">Si tiene problemas para enviar su reporte:</p>
                 <p class="mb-1">
                   📧
@@ -94,11 +102,12 @@
                   📞 <a href="tel:+54022145678900">(0221) 4567-8900</a>
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
+            </article>
+          </section>
+        </aside>
 
-        <div class="col-md-9">
+        <!-- Main form section -->
+        <section class="col-md-9">
           <form>
             <div class="mb-3">
               <label for="reportType" class="form-label"
@@ -113,7 +122,6 @@
                 <option value="" disabled selected>
                   Seleccione tipo de reporte
                 </option>
-
                 <option value="nueva">Nueva inundación</option>
                 <option value="actualizacion">Actualización</option>
                 <option value="conexion">Posible inundación</option>
@@ -225,13 +233,15 @@
               Cancelar
             </button>
           </form>
-        </div>
+        </section>
       </div>
-    </div>
-    &nbsp;
+      &nbsp;
+    </main>
 
     <!-- Footer -->
-    <footer-component></footer-component>
+    <footer>
+      <footer-component></footer-component>
+    </footer>
 
     <script src="js/footer-component.js" defer></script>
     <!-- Bootstrap JS -->

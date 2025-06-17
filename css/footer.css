@@ -1,0 +1,38 @@
+footer.footer {
+  background-color: var(--color-fondo-secundario);
+}
+
+.footer p {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  max-width: 320px;
+}
+
+.footer li {
+  color: var(--color-texto-primario);
+  font-size: 0.875rem;
+  margin-right: .75rem;
+}
+
+footer.footer a:hover {
+  text-decoration: underline;
+}
+
+/*
+@media (max-width: 576px) {
+  .footer p, a{
+    font-size: 0.75rem;
+  }
+
+  .copyright{
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer a {
+    font-size: 0.687rem;
+  }
+}
+
+*/

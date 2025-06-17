@@ -19,6 +19,10 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <script src="js/navbar-component.js" defer></script>
   </head>
 
   <body>
@@ -28,29 +32,246 @@
     >
 
     <!-- Encabezado -->
-    <header class="bg-primary text-white p-3" role="banner">
-      <p>Soy un nav</p>
-      <a href="proponer_datos.html">Proponer datos</a>
+    <header role="banner">
+      <navbar-component></navbar-component>
+      <section class="hero-section text-center" aria-labelledby="hero-title">
+        <div class="container">
+          <h1 id="hero-title" class="hero-title fw-bold mb-3">
+            Información sobre inundaciones
+          </h1>
+
+          <p class="hero-description mx-auto mb-4">
+            Accedé a datos actualizados sobre zonas inundadas, niveles de agua y
+            alertas para mantenerte seguro durante eventos de inundación en la
+            ciudad.
+          </p>
+
+          <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a
+              href="mapa.html"
+              class="btn btn-map d-flex align-items-center px-4 py-2 rounded-pill shadow-sm"
+            >
+              <img
+                src="assets/images/map-icon.svg"
+                alt=""
+                class="me-2"
+                width="20"
+                height="20"
+              />
+              Ver mapa interactivo
+            </a>
+
+            <a
+              href="proponer_datos.html"
+              class="btn btn-report d-flex align-items-center px-4 py-2 rounded-pill shadow-sm"
+            >
+              <img
+                src="assets/images/data-icon.svg"
+                alt=""
+                class="me-2"
+                width="20"
+                height="20"
+              />
+              Reportar inundación
+            </a>
+          </div>
+        </div>
+      </section>
     </header>
 
     <!-- Contenido principal -->
     <main id="main-content" class="container py-4">
-      <h2 class="h4">Bienvenido</h2>
-      <p>
-        Aca va a empezar la página web que va a quedar bien facha y se supone
-        que accesible :/
-      </p>
+      <section class="container my-5" aria-labelledby="info-cards-title">
+        <h2 id="info-cards-title" class="text-center fw-bold mb-4">
+          Información útil
+        </h2>
+
+        <div class="row justify-content-center g-4">
+          <!-- Card 1 -->
+          <article class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 p-4">
+              <img
+                src="assets/images/alert-icon.svg"
+                class="mb-3"
+                alt=""
+                width="44"
+                height="44"
+              />
+
+              <h3 class="h5 text-primary fw-bold">Alertas</h3>
+
+              <p class="text-secondary">
+                Recibí notificaciones inmediatas sobre nuevas inundaciones,
+                cambios en los niveles de agua y zonas de riesgo en toda la
+                ciudad.
+              </p>
+
+              <a
+                href="alertas.html"
+                class="d-flex align-items-center text-decoration-none text-primary fw-semibold mt-auto"
+              >
+                Ver alertas activas
+                <img
+                  src="assets/images/arrow-icon.svg"
+                  alt=""
+                  class="ms-2"
+                  width="16"
+                  height="16"
+                />
+              </a>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 p-4">
+              <img
+                src="assets/images/map-icon-2.svg"
+                class="mb-3"
+                alt="Mapa con zonas de inundación"
+                width="48"
+                height="44"
+              />
+
+              <h3 class="h5 text-primary fw-bold">Mapa interactivo</h3>
+
+              <p class="text-secondary">
+                Explorá el mapa detallado con información sobre inundaciones
+                actuales, históricas y zonas propensas a inundarse.
+              </p>
+
+              <a
+                href="mapa.html"
+                class="d-flex align-items-center text-decoration-none text-primary fw-semibold mt-auto"
+              >
+                Explorar mapa
+                <img
+                  src="assets/images/arrow-icon.svg"
+                  alt=""
+                  class="ms-2"
+                  width="16"
+                  height="16"
+                />
+              </a>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 p-4">
+              <img
+                src="assets/images/community-icon.svg"
+                class="mb-3"
+                alt="Icono de colaboración"
+                width="43"
+                height="43"
+              />
+
+              <h3 class="h5 text-primary fw-bold">Colaboración ciudadana</h3>
+
+              <p class="text-secondary">
+                Contribuí con tus observaciones para ayudar a mantener la
+                información actualizada y beneficiar a toda la comunidad.
+              </p>
+
+              <a
+                href="proponer_datos.html"
+                class="d-flex align-items-center text-decoration-none text-primary fw-semibold mt-auto"
+              >
+                Proponer datos
+                <img
+                  src="assets/images/arrow-icon.svg"
+                  alt=""
+                  class="ms-2"
+                  width="16"
+                  height="16"
+                />
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Actualizaciones recientes -->
+      <section class="container my-5" aria-labelledby="recent-updates-title">
+        <h2 id="recent-updates-title" class="text-primary fw-bold mb-4">
+          Actualizaciones recientes
+        </h2>
+
+        <div class="d-flex flex-column gap-3">
+          <!-- Actualización 1 -->
+          <article class="d-flex rounded-2 p-3 align-items-center">
+            <div
+              class="bg-primary text-white text-center rounded-2 px-3 py-2 me-3"
+              style="width: 60px; height: 60px"
+            >
+              <div class="fs-5 fw-bold lh-1">15</div>
+              <time class="small text-light d-block" datetime="2025-06-15"
+                >JUN</time
+              >
+            </div>
+            <div>
+              <h3 class="h6 text-primary fw-semibold mb-1">
+                Alerta de inundación: Zona Norte
+              </h3>
+              <p class="mb-0 text-secondary">
+                Reportes de calles inundadas en 3 y 33 tras las fuertes lluvias
+                de esta mañana.
+              </p>
+            </div>
+          </article>
+
+          <!-- Actualización 2 -->
+          <article class="d-flex rounded-2 p-3 align-items-center">
+            <div
+              class="bg-primary text-white text-center rounded-2 px-3 py-2 me-3"
+              style="width: 60px; height: 60px"
+            >
+              <div class="fs-5 fw-bold lh-1">14</div>
+              <time class="small text-light d-block" datetime="2025-06-14"
+                >JUN</time
+              >
+            </div>
+            <div>
+              <h3 class="h6 text-primary fw-semibold mb-1">
+                Actualización del mapa interactivo
+              </h3>
+              <p class="mb-0 text-secondary">
+                Hemos añadido nuevas capas al mapa que muestran las zonas
+                históricamente más afectadas por inundaciones en los últimos 5
+                años.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <!-- Botón Ver todas -->
+        <div class="mt-4">
+          <a
+            href="actualizaciones.html"
+            class="btn btn-outline-primary rounded-pill d-inline-flex align-items-center gap-2"
+          >
+            Ver todas
+            <img
+              src="assets/images/arrow-icon.svg"
+              alt=""
+              width="16"
+              height="16"
+            />
+          </a>
+        </div>
+      </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-light text-center py-3" role="footer">
-      <small
-        >&copy; 2025 - Todos los derechos reservados - ASI QUE NO NOS ROBEN -
-        Gracias :)</small
-      >
-    </footer>
+    <footer-component></footer-component>
 
     <!-- Por si manijeamos con js -->
     <script src="js/main.js"></script>
+    <script src="js/footer-component.js" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
   </body>
 </html>

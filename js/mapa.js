@@ -10,7 +10,8 @@ L.control.zoom({
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
 
-// 1. Zonas de riesgo 
+
+// 1. Zonas de riesgo
 var geojsonData = {
   type: "FeatureCollection",
   features: [
@@ -19,50 +20,44 @@ var geojsonData = {
       properties: { risk: "bajo" },
       geometry: {
         type: "Polygon",
-        coordinates: [
-          [
-            [-57.98, -34.94],
-            [-57.96, -34.94],
-            [-57.96, -34.92],
-            [-57.98, -34.92],
-            [-57.98, -34.94],
-          ],
-        ],
-      },
+        coordinates: [[
+          [-57.981000, -34.936800], // oeste-noroeste (cerca de Tolosa)
+          [-57.962500, -34.936800], // noreste
+          [-57.962500, -34.917000], // sureste
+          [-57.981000, -34.917000], // suroeste
+          [-57.981000, -34.936800]
+        ]]
+      }
     },
     {
       type: "Feature",
       properties: { risk: "alto" },
       geometry: {
         type: "Polygon",
-        coordinates: [
-          [
-            [-57.96, -34.93],
-            [-57.94, -34.93],
-            [-57.94, -34.91],
-            [-57.96, -34.91],
-            [-57.96, -34.93],
-          ],
-        ],
-      },
+        coordinates: [[
+          [-57.958000, -34.931800], // zona centro
+          [-57.940000, -34.931800],
+          [-57.940000, -34.911800],
+          [-57.958000, -34.911800],
+          [-57.958000, -34.931800]
+        ]]
+      }
     },
     {
       type: "Feature",
       properties: { risk: "medio" },
       geometry: {
         type: "Polygon",
-        coordinates: [
-          [
-            [-57.94, -34.92],
-            [-57.92, -34.92],
-            [-57.92, -34.90],
-            [-57.94, -34.90],
-            [-57.94, -34.92],
-          ],
-        ],
-      },
+        coordinates: [[
+          [-57.938500, -34.925000], // zona este, cerca de Av. 13 y Plaza Matheu
+          [-57.917000, -34.925000],
+          [-57.917000, -34.904500],
+          [-57.938500, -34.904500],
+          [-57.938500, -34.925000]
+        ]]
+      }
     },
-  ],
+  ]
 };
 
 function getColor(risk) {
@@ -115,12 +110,12 @@ var markerLayers = {
 };
 
 [
-  { type: "refugios", coords: [-34.932, -57.982], icon: "house", popup: "Refugio 1 - Escuela Primaria N°10" },
-  { type: "refugios", coords: [-34.928, -57.978], icon: "house", popup: "Refugio 2 - Sociedad de Fomento" },
-  { type: "centros-asistencia", coords: [-34.920, -57.951], icon: "plus-square", popup: "Centro de Asistencia 1 - Hospital San Juan" },
-  { type: "centros-asistencia", coords: [-34.918, -57.946], icon: "plus-square", popup: "Centro de Asistencia 2 - Salita 22" },
-  { type: "puntos-encuentro", coords: [-34.905, -57.932], icon: "geo-alt", popup: "Punto de Encuentro 1 - Plaza Belgrano" },
-  { type: "puntos-encuentro", coords: [-34.907, -57.936], icon: "geo-alt", popup: "Punto de Encuentro 2 - Club El Fortín" }
+  { type: "refugios", coords: [-34.934185, -57.969457], icon: "house", popup: "Parque Juan Vucetich" },
+  { type: "refugios", coords: [-34.9251, -57.9582], icon: "house", popup: "Refugio - Club Vecinal" },
+  { type: "centros-asistencia", coords: [-34.923960, -57.936876], icon: "plus-square", popup: "Centro de Salud - Reencuentro" },
+  { type: "centros-asistencia", coords: [-34.924029, -57.975154], icon: "plus-square", popup: "Centro de Salud - Salita" },
+  { type: "puntos-encuentro", coords: [-34.920216, -57.929031], icon: "geo-alt", popup: "Punto de Encuentro - Plaza Matheu" },
+  { type: "puntos-encuentro", coords: [-34.915430, -57.947785], icon: "geo-alt", popup: "Punto de Encuentro - Parque San Martín" }
 ].forEach(m => {
   L.marker(m.coords, {
     icon: L.divIcon({ className: "bi", html: `<i class="bi bi-${m.icon}"></i>` })

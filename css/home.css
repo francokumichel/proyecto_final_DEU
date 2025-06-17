@@ -87,3 +87,18 @@
 .card-link:hover img {
   transform: translateX(4px);
 }
+
+.boton-ver-todas {
+  background-color: var(--color-fondo);
+  color: var(--color-fondo-secundario);
+  border: 1px solid var(--color-fondo-secundario);
+  transition: background-color 0.3s ease;
+}
+
+.boton-ver-todas:hover {
+  background-color: var(--color-fondo-secundario);
+  color: var(--color-fondo);
+  border: none;
+}
+
+

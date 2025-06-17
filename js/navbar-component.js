@@ -3,7 +3,9 @@ class NavbarComponent extends HTMLElement {
     this.innerHTML = `
         <nav class="navbar navbar-expand-lg" role="navigation" aria-label="Navegación principal">
           <div class="container-fluid">
-            <img src="assets/images/logo-area.png" alt="">
+            <a href="index.html" aria-label="Ir a la página de inicio">
+              <img src="assets/images/logo-area.png" alt="Logo" />
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
               aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegación">
               <span class="navbar-toggler-icon"></span>

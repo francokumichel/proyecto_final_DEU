@@ -31,17 +31,17 @@
       .filter-panel {
         top: 10px;
         left: 10px;
-        max-height: calc(80vh - 20px); /* Fit within map container height */
-        overflow-y: auto; /* Enable vertical scrolling */
+        max-height: calc(80vh - 20px);
+        overflow-y: auto;
       }
       .legend-panel {
         bottom: 10px;
         right: 10px;
-        max-height: calc(80vh - 20px); /* Fit within map container height */
-        overflow-y: auto; /* Enable vertical scrolling */
+        max-height: calc(80vh - 20px);
+        overflow-y: auto;
       }
       .panel-hidden {
-        display: none; /* Class to hide panels */
+        display: none;
       }
       .high-contrast {
         filter: contrast(1.5);
@@ -57,15 +57,15 @@
       }
       .toggle-button {
         background-color: #fff;
-        border: 1px solid #777; /* Un gris medio para el borde */
-        color: #333; /* Un gris oscuro para el texto */
+        border: 1px solid #777;
+        color: #333;
         padding: 5px 10px;
         cursor: pointer;
       }
       @media (max-width: 576px) {
         .filter-panel,
         .legend-panel {
-          max-width: 100%; /* Full width on small screens */
+          max-width: 100%;
         }
         .toggle-controls {
           flex-direction: column;
@@ -78,12 +78,10 @@
     <script src="js/navbar-component.js" defer></script>
   </head>
   <body>
-    <!-- Header with navigation -->
     <header>
       <navbar-component></navbar-component>
     </header>
 
-    <!-- Main content -->
     <main class="container-fluid p-3">
       <header>
         <h1 class="text-center">Mapa Interactivo: La Plata y alrededores</h1>
@@ -92,7 +90,6 @@
         </p>
       </header>
 
-      <!-- Toggle buttons for filters and legend -->
       <div
         class="toggle-controls"
         role="group"
@@ -261,7 +258,6 @@
       </section>
     </main>
 
-    <!-- Footer -->
     <footer>
       <footer-component></footer-component>
     </footer>
@@ -271,7 +267,6 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="js/mapa.js"></script>
     <script>
-      // Toggle Filters and Legend Panels
       document
         .getElementById("toggle-filters")
         .addEventListener("click", function () {

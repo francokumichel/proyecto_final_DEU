@@ -239,6 +239,14 @@ document.getElementById("toggle-ayudas").addEventListener("click", function() {
   this.setAttribute('aria-pressed', ayudasVisuales);
   this.textContent = ayudasVisuales ? "Ocultar ayudas visuales" : "Mostrar ayudas visuales";
   applyFilters();
+
+  // Mostrar el toast
+  const toastEl = document.getElementById("ayudasToast");
+  const toast = new bootstrap.Toast(toastEl);
+  toastEl.querySelector(".toast-header strong").textContent = ayudasVisuales
+    ? "Ayudas Visuales Activadas"
+    : "Ayudas Visuales Desactivadas";
+  toast.show();
 });
 
 // Inicialización

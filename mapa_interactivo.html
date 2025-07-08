@@ -303,5 +303,50 @@
           this.innerHTML = `<i class="bi bi-info-circle"></i> ${isHidden ? "Mostrar Leyenda" : "Ocultar Leyenda"}`;
         });
     </script>
+
+    <!-- Toast para notificación de ayudas visuales -->
+    <div
+      class="toast-container position-fixed top-0 end-0 p-3"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <div
+        class="toast"
+        id="ayudasToast"
+        role="alert"
+        aria-label="Notificación de ayudas visuales"
+        data-bs-autohide="true"
+        data-bs-delay="5000"
+      >
+        <div class="toast-header bg-primary text-white">
+          <i class="bi bi-eye me-2"></i>
+          <strong class="me-auto">Ayudas Visuales Activadas</strong>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="toast"
+            aria-label="Cerrar"
+          ></button>
+        </div>
+        <div class="toast-body">
+          <ul class="list-unstyled mb-0">
+            <li>
+              <strong>Zona de riesgo bajo:</strong> Círculos, borde sólido
+              <span class="ms-2 text-success" aria-hidden="true">●</span>
+            </li>
+            <li>
+              <strong>Zona de riesgo medio:</strong> Rayas diagonales (hacia la
+              izquierda), borde punteado
+              <span class="ms-2 text-warning" aria-hidden="true">●</span>
+            </li>
+            <li>
+              <strong>Zona de riesgo alto:</strong> Rayas diagonales (hacia la
+              derecha), borde rayado
+              <span class="ms-2 text-danger" aria-hidden="true">●</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

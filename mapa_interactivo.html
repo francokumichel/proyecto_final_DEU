@@ -31,17 +31,17 @@
       .filter-panel {
         top: 10px;
         left: 10px;
-        max-height: calc(80vh - 20px);
-        overflow-y: auto;
+        max-height: calc(80vh - 20px); /* Fit within map container height */
+        overflow-y: auto; /* Enable vertical scrolling */
       }
       .legend-panel {
         bottom: 10px;
         right: 10px;
-        max-height: calc(80vh - 20px);
-        overflow-y: auto;
+        max-height: calc(80vh - 20px); /* Fit within map container height */
+        overflow-y: auto; /* Enable vertical scrolling */
       }
       .panel-hidden {
-        display: none;
+        display: none; /* Class to hide panels */
       }
       .high-contrast {
         filter: contrast(1.5);
@@ -57,15 +57,15 @@
       }
       .toggle-button {
         background-color: #fff;
-        border: 1px solid #777;
-        color: #333;
+        border: 1px solid #777; /* Un gris medio para el borde */
+        color: #333; /* Un gris oscuro para el texto */
         padding: 5px 10px;
         cursor: pointer;
       }
       @media (max-width: 576px) {
         .filter-panel,
         .legend-panel {
-          max-width: 100%;
+          max-width: 100%; /* Full width on small screens */
         }
         .toggle-controls {
           flex-direction: column;
@@ -78,10 +78,12 @@
     <script src="js/navbar-component.js" defer></script>
   </head>
   <body>
+    <!-- Header with navigation -->
     <header>
       <navbar-component></navbar-component>
     </header>
 
+    <!-- Main content -->
     <main class="container-fluid p-3">
       <header>
         <h1 class="text-center">Mapa Interactivo: La Plata y alrededores</h1>
@@ -90,6 +92,7 @@
         </p>
       </header>
 
+      <!-- Toggle buttons for filters and legend -->
       <div
         class="toggle-controls"
         role="group"
@@ -110,6 +113,14 @@
           aria-expanded="true"
         >
           <i class="bi bi-info-circle"></i> Ocultar Leyenda
+        </button>
+        <button
+          class="toggle-button btn btn-outline-primary"
+          id="toggle-ayudas"
+          aria-label="Activar o desactivar ayudas visuales en el mapa"
+          aria-pressed="false"
+        >
+          Mostrar ayudas visuales
         </button>
       </div>
 
@@ -258,15 +269,22 @@
       </section>
     </main>
 
+    <!-- Footer -->
     <footer>
       <footer-component></footer-component>
     </footer>
 
+    <accessibility-modal></accessibility-modal>
+
     <script src="js/footer-component.js" defer></script>
+    <script src="js/accessibility-modal.js"></script>
+    <script src="js/accessibility-settings.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/leaflet.pattern-src.js"></script>
     <script src="js/mapa.js"></script>
     <script>
+      // Toggle Filters and Legend Panels
       document
         .getElementById("toggle-filters")
         .addEventListener("click", function () {

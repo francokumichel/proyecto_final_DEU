@@ -1,11 +1,30 @@
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('../assets/fonts/OpenDyslexic/OpenDyslexic-Regular.woff2') format('woff2'),
+       url('../assets/fonts/OpenDyslexic/OpenDyslexic-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('../assets/fonts/OpenDyslexic/OpenDyslexic-Bold.woff2') format('woff2'),
+       url('../assets/fonts/OpenDyslexic/OpenDyslexic-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+
 /* ==== Variables de color accesibles ==== */
 :root {
     --color-fondo: #F5F9FD;
     --color-fondo-secundario: #2B6CB0;
     --color-fondo-terciario: #F59E0B;
     --color-texto-primario: #FFFFFF;
+    --color-texto-secundario: #E3F2FD;
     --color-texto-titulo: #1E4E8C;
     --color-foco: #ffbf47;
+    --color-fondo-terciario-hover: #d98206;
     --fuente-base: 'Montserrat', sans-serif;
 }
 
@@ -20,7 +39,7 @@ html {
 }
   
 body {
-    font-family: var(--fuente-base);
+    font-family: 'Montserrat', sans-serif;
     color: var(--color-texto);
     background-color: var(--color-fondo);
     line-height: 1.6;
@@ -72,10 +91,55 @@ img {
     height: auto;
     display: block;
 }  
+
 /* Bootstrap overrides opcionales */
 .btn:focus-visible {
     box-shadow: 0 0 0 0.25rem rgba(255, 191, 71, 0.5); /* Para un color de foco accesible :) */
 }
+
+/* Contraste alto */
+body.high-contrast {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+body.high-contrast a {
+  color: #0ff !important;
+}
+
+body.high-contrast img {
+  filter: brightness(0.8) contrast(1.2);
+}
+
+html.font-normal {
+  font-size: 16px;
+}
+
+html.font-large {
+  font-size: 18px;
+}
+
+html.font-xlarge {
+  font-size: 20px;
+}
+
+/* Tipografía legible */
+body.dyslexic-font {
+  font-family: 'OpenDyslexic', Arial, sans-serif;
+}
+
+/* Foco visible */
+body.focus-visible *:focus {
+  outline: 3px solid #ffbf47;
+  outline-offset: 3px;
+}
+
+/* Solo para probar visibilidad en links */
+body.focus-visible a:focus {
+  background-color: #ffbf47;
+  color: #000;
+}
+
 
 @media (max-width: 576px) {
     html {

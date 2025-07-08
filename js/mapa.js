@@ -21,10 +21,10 @@ var geojsonData = {
       geometry: {
         type: "Polygon",
         coordinates: [[
-          [-57.981000, -34.936800],
-          [-57.962500, -34.936800],
-          [-57.962500, -34.917000],
-          [-57.981000, -34.917000],
+          [-57.981000, -34.936800], // oeste-noroeste (cerca de Tolosa)
+          [-57.962500, -34.936800], // noreste
+          [-57.962500, -34.917000], // sureste
+          [-57.981000, -34.917000], // suroeste
           [-57.981000, -34.936800]
         ]]
       }
@@ -35,7 +35,7 @@ var geojsonData = {
       geometry: {
         type: "Polygon",
         coordinates: [[
-          [-57.958000, -34.931800],
+          [-57.958000, -34.931800], // zona centro
           [-57.940000, -34.931800],
           [-57.940000, -34.911800],
           [-57.958000, -34.911800],
@@ -49,7 +49,7 @@ var geojsonData = {
       geometry: {
         type: "Polygon",
         coordinates: [[
-          [-57.938500, -34.925000],
+          [-57.938500, -34.925000], // zona este, cerca de Av. 13 y Plaza Matheu
           [-57.917000, -34.925000],
           [-57.917000, -34.904500],
           [-57.938500, -34.904500],
@@ -66,41 +66,96 @@ function getColor(risk) {
       "#28a745";
 }
 
+let ayudasVisuales = false;
+
+// Modifica la función de estilo de cada capa para usar fillPattern solo si ayudasVisuales está activo
+function getStyle(feature) {
+  const risk = feature.properties.risk;
+  if (risk === "alto") {
+    return {
+      fillPattern: ayudasVisuales ? patternAlto : undefined,
+      fillColor: ayudasVisuales ? undefined : 'rgba(220,53,69,0.4)', // rojo translúcido
+      color: '#dc3545', // borde rojo
+      fillOpacity: 0.5,
+      weight: 3,
+      dashArray: '24,14', // rayado ancho para alto riesgo
+    };
+  }
+  if (risk === "medio") {
+    return {
+      fillPattern: ayudasVisuales ? patternMedio : undefined,
+      fillColor: ayudasVisuales ? undefined : 'rgba(255,193,7,0.4)', // amarillo translúcido
+      color: '#ff9900', // borde naranja
+      fillOpacity: 0.5,
+      weight: 3,
+      dashArray: '4,4', // borde punteado
+    };
+  }
+  // Bajo riesgo
+  return {
+    fillPattern: ayudasVisuales ? patternBajo : undefined,
+    fillColor: ayudasVisuales ? undefined : 'rgba(40,167,69,0.4)', // verde translúcido
+    color: '#28a745', // borde verde
+    fillOpacity: 0.5,
+    weight: 3,
+    dashArray: '', // borde sólido
+  };
+}
+
+
+var patternAlto = new L.StripePattern({ weight: 4, spaceColor: '#fff', color: 'rgba(220, 53, 69, 0.4)', spaceOpacity: 0.6, angle: 45 });
+patternAlto.addTo(map);
+
+var patternMedio = new L.StripePattern({ weight: 4, spaceColor: '#fff', color: 'rgba(255, 193, 7, 0.4)', spaceOpacity: 0.6, angle: -45 });
+patternMedio.addTo(map);
+
+var shape = new L.PatternCircle({
+  x: 7.5,
+  y: 7.5,
+  radius: 6,
+  fill: false,
+  color: "rgba(40, 167, 69, 0.4)",       // Borde transparente
+  fillColor: "rgba(40, 167, 69, 0.4)",   // Relleno transparente
+});
+var patternBajo = new L.Pattern({ width: 15, height: 15 });
+patternBajo.addShape(shape);
+patternBajo.addTo(map);
+
 var geojsonLayers = {
   alto: L.geoJSON(geojsonData, {
-    style: function(feature) {
-      return {
-        fillColor: getColor(feature.properties.risk),
-        color: getColor(feature.properties.risk),
-        fillOpacity: 0.5,
-        weight: 1
-      };
-    },
-    filter: (feature) => feature.properties.risk === "alto"
+    style: getStyle,
+    filter: f => f.properties.risk === "alto",
   }),
   medio: L.geoJSON(geojsonData, {
-    style: function(feature) {
-      return {
-        fillColor: getColor(feature.properties.risk),
-        color: getColor(feature.properties.risk),
-        fillOpacity: 0.5,
-        weight: 1
-      };
-    },
-    filter: (feature) => feature.properties.risk === "medio"
+    style: getStyle,
+    filter: f => f.properties.risk == "medio",
   }),
   bajo: L.geoJSON(geojsonData, {
-    style: function(feature) {
-      return {
-        fillColor: getColor(feature.properties.risk),
-        color: getColor(feature.properties.risk),
-        fillOpacity: 0.5,
-        weight: 1
-      };
-    },
-    filter: (feature) => feature.properties.risk === "bajo"
+    style: getStyle,
+    filter: f => f.properties.risk == "bajo",
   })
 };
+
+geojsonLayers.alto.on('click', function(e) {
+  L.popup()
+    .setLatLng(e.latlng)
+    .setContent('Zona de riesgo alto')
+    .openOn(map);
+});
+geojsonLayers.medio.on('click', function(e) {
+  L.popup()
+    .setLatLng(e.latlng)
+    .setContent('Zona de riesgo medio')
+    .openOn(map);
+});
+geojsonLayers.bajo.on('click', function(e) {
+  L.popup()
+    .setLatLng(e.latlng)
+    .setContent('Zona de riesgo bajo')
+    .openOn(map);
+});
+
+
 
 // 2. Marcadores 
 var markerLayers = {
@@ -146,6 +201,10 @@ function initLayers() {
 
 // 4. Función de filtrado
 function applyFilters() {
+  geojsonLayers.alto.setStyle(getStyle);
+  geojsonLayers.medio.setStyle(getStyle);
+  geojsonLayers.bajo.setStyle(getStyle);
+
   // Zonas
   geojsonLayers.alto.setStyle({
     fillOpacity: document.getElementById("alto-riesgo").checked ? 0.5 : 0,
@@ -173,6 +232,14 @@ function applyFilters() {
     ? map.addLayer(markerLayers["centros-asistencia"])
     : map.removeLayer(markerLayers["centros-asistencia"]);
 }
+
+// Lógica para el botón de ayudas visuales:
+document.getElementById("toggle-ayudas").addEventListener("click", function() {
+  ayudasVisuales = !ayudasVisuales;
+  this.setAttribute('aria-pressed', ayudasVisuales);
+  this.textContent = ayudasVisuales ? "Ocultar ayudas visuales" : "Mostrar ayudas visuales";
+  applyFilters();
+});
 
 // Inicialización
 document.addEventListener("DOMContentLoaded", function() {

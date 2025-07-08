@@ -21,10 +21,10 @@ var geojsonData = {
       geometry: {
         type: "Polygon",
         coordinates: [[
-          [-57.981000, -34.936800],
-          [-57.962500, -34.936800],
-          [-57.962500, -34.917000],
-          [-57.981000, -34.917000],
+          [-57.981000, -34.936800], // oeste-noroeste (cerca de Tolosa)
+          [-57.962500, -34.936800], // noreste
+          [-57.962500, -34.917000], // sureste
+          [-57.981000, -34.917000], // suroeste
           [-57.981000, -34.936800]
         ]]
       }
@@ -35,7 +35,7 @@ var geojsonData = {
       geometry: {
         type: "Polygon",
         coordinates: [[
-          [-57.958000, -34.931800],
+          [-57.958000, -34.931800], // zona centro
           [-57.940000, -34.931800],
           [-57.940000, -34.911800],
           [-57.958000, -34.911800],
@@ -49,7 +49,7 @@ var geojsonData = {
       geometry: {
         type: "Polygon",
         coordinates: [[
-          [-57.938500, -34.925000],
+          [-57.938500, -34.925000], // zona este, cerca de Av. 13 y Plaza Matheu
           [-57.917000, -34.925000],
           [-57.917000, -34.904500],
           [-57.938500, -34.904500],
@@ -66,14 +66,31 @@ function getColor(risk) {
       "#28a745";
 }
 
+var patternAlto = new L.StripePattern({ weight: 4, spaceColor: '#fff', color: '#dc3545', spaceOpacity: 0.6, angle: 45 });
+patternAlto.addTo(map);
+
+var patternMedio = new L.StripePattern({ weight: 4, spaceColor: '#fff', color: '#ffc107', spaceOpacity: 0.6, angle: -45 });
+patternMedio.addTo(map);
+
+var shape = new L.PatternCircle({
+  x: 12,
+  y: 12,
+  radius: 5,
+  fill: false
+});
+var patternBajo = new L.Pattern({ radius: 3, color: '#28a745', fillColor: '#28a745', spaceColor: '#fff', width: 15, height: 15 });
+patternBajo.addShape(shape);
+patternBajo.addTo(map);
+
 var geojsonLayers = {
   alto: L.geoJSON(geojsonData, {
     style: function(feature) {
       return {
-        fillColor: getColor(feature.properties.risk),
+        fillPattern: patternAlto,
         color: getColor(feature.properties.risk),
         fillOpacity: 0.5,
-        weight: 1
+        weight: 3,
+        dashArray: '10,6', // Borde rayado para alto riesgo
       };
     },
     filter: (feature) => feature.properties.risk === "alto"
@@ -81,10 +98,11 @@ var geojsonLayers = {
   medio: L.geoJSON(geojsonData, {
     style: function(feature) {
       return {
-        fillColor: getColor(feature.properties.risk),
+        fillPattern: patternMedio,
         color: getColor(feature.properties.risk),
         fillOpacity: 0.5,
-        weight: 1
+        weight: 3,
+        dashArray: '4,4', // Borde punteado para riesgo medio
       };
     },
     filter: (feature) => feature.properties.risk === "medio"
@@ -92,10 +110,11 @@ var geojsonLayers = {
   bajo: L.geoJSON(geojsonData, {
     style: function(feature) {
       return {
-        fillColor: getColor(feature.properties.risk),
+        fillPattern: patternBajo,
         color: getColor(feature.properties.risk),
         fillOpacity: 0.5,
-        weight: 1
+        weight: 3,
+        dashArray: '', // Borde sólido para riesgo bajo
       };
     },
     filter: (feature) => feature.properties.risk === "bajo"

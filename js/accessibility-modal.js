@@ -13,8 +13,10 @@ class AccessibilityModal extends HTMLElement {
             <div class="modal-body">
               <form id="accessibilityForm">
                 <div class="form-check mb-3">
-                  <input class="form-check-input" type="checkbox" id="highContrast">
-                  <label class="form-check-label" for="highContrast">Activar modo de alto contraste</label>
+                  <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                  <label class="form-check-label" for="darkModeToggle">
+                    Activar modo oscuro
+                  </label>
                 </div>
                 <div class="mb-3">
                   <label for="fontSizeSelect" class="form-label">Tamaño de fuente:</label>

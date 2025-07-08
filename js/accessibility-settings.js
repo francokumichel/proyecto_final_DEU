@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.body;
 
-  // Contraste alto
-  document.getElementById('highContrast')?.addEventListener('change', e => {
-    root.classList.toggle('high-contrast', e.target.checked);
+  document.getElementById('darkModeToggle')?.addEventListener('change', e => {
+    document.body.classList.toggle('dark-mode', e.target.checked);
   });
 
   // Tamaño de fuente

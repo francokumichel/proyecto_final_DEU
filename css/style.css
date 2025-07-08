@@ -20,6 +20,7 @@
     --color-fondo: #F5F9FD;
     --color-fondo-secundario: #2B6CB0;
     --color-fondo-terciario: #F59E0B;
+    --color-fondo-hero: linear-gradient(270deg, rgba(43, 108, 176, 1) 0%, rgba(30, 78, 140, 1) 100%);
     --color-texto-primario: #FFFFFF;
     --color-texto-secundario: #E3F2FD;
     --color-texto-titulo: #1E4E8C;
@@ -138,6 +139,17 @@ body.focus-visible *:focus {
 body.focus-visible a:focus {
   background-color: #ffbf47;
   color: #000;
+}
+
+body.dark-mode {
+  --color-fondo: #121212;                   /* Fondo general */
+  --color-fondo-secundario: #1E4E8C;        /* Fondo navbar / botones */
+  --color-fondo-terciario: #F59E0B;         /* Botones destacados (conservamos el naranja) */
+  --color-fondo-terciario-hover: #d98206;   /* Hover del botón destacado */
+  --color-texto-primario: #FFFFFF;          /* Texto sobre fondos oscuros */
+  --color-texto-secundario: #B0C4DE;        /* Texto secundario más suave */
+  --color-texto-titulo: #E3F2FD;            /* Títulos o encabezados */
+  --color-foco: #ffbf47;                    /* Enfocado accesible (sin cambio) */
 }
 
 

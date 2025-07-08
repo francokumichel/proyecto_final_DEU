@@ -26,11 +26,6 @@
   </head>
 
   <body>
-    <!-- Skip link -->
-    <a href="#main-content" class="skip-link"
-      >Presiona aca dale, no seas cagón</a
-    >
-
     <!-- Encabezado -->
     <header role="banner">
       <navbar-component></navbar-component>
@@ -203,7 +198,7 @@
           <article class="d-flex rounded-2 p-3 align-items-center">
             <div
               class="bg-primary text-white text-center rounded-2 px-3 py-2 me-3"
-              style="width: 60px; height: 60px"
+              style="width: 3.75rem; height: 3.75rem"
             >
               <div class="fs-5 fw-bold lh-1">15</div>
               <time class="small text-light d-block" datetime="2025-06-15"
@@ -225,7 +220,7 @@
           <article class="d-flex rounded-2 p-3 align-items-center">
             <div
               class="bg-primary text-white text-center rounded-2 px-3 py-2 me-3"
-              style="width: 60px; height: 60px"
+              style="width: 3.75rem; height: 3.75rem"
             >
               <div class="fs-5 fw-bold lh-1">14</div>
               <time class="small text-light d-block" datetime="2025-06-14"
@@ -272,10 +267,14 @@
 
     <!-- Footer -->
     <footer-component></footer-component>
+    <accessibility-modal></accessibility-modal>
+
 
     <!-- Por si manijeamos con js -->
     <script src="js/main.js"></script>
     <script src="js/footer-component.js" defer></script>
+    <script src="js/accessibility-modal.js"></script>
+    <script src="js/accessibility-settings.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       defer

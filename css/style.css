@@ -21,9 +21,12 @@
     --color-fondo-secundario: #2B6CB0;
     --color-fondo-terciario: #F59E0B;
     --color-fondo-hero: linear-gradient(270deg, rgba(43, 108, 176, 1) 0%, rgba(30, 78, 140, 1) 100%);
+    --color-fondo-card: #FFFFFF;
     --color-texto-primario: #FFFFFF;
     --color-texto-secundario: #E3F2FD;
+    --color-texto-terciario: #2B6CB0;
     --color-texto-titulo: #1E4E8C;
+    --color-texto-titulo-secundario: #000000;
     --color-foco: #ffbf47;
     --color-fondo-terciario-hover: #d98206;
     --fuente-base: 'Montserrat', sans-serif;
@@ -142,15 +145,20 @@ body.focus-visible a:focus {
 }
 
 body.dark-mode {
-  --color-fondo: #121212;                   /* Fondo general */
-  --color-fondo-secundario: #1E4E8C;        /* Fondo navbar / botones */
-  --color-fondo-terciario: #F59E0B;         /* Botones destacados (conservamos el naranja) */
-  --color-fondo-terciario-hover: #d98206;   /* Hover del botón destacado */
-  --color-texto-primario: #FFFFFF;          /* Texto sobre fondos oscuros */
-  --color-texto-secundario: #B0C4DE;        /* Texto secundario más suave */
-  --color-texto-titulo: #E3F2FD;            /* Títulos o encabezados */
-  --color-foco: #ffbf47;                    /* Enfocado accesible (sin cambio) */
+  --color-fondo: #000000; /* fondo general */
+  --color-fondo-secundario: #1E1E1E; /* navbar, footer, tarjetas destacadas */
+  --color-fondo-terciario: #F59E0B; /* botón naranja */
+  --color-fondo-terciario-hover: #d98206;
+  --color-fondo-hero: #000000;
+  --color-fondo-card: #1E1E1E;
+  --color-texto-primario: #FFFFFF; /* texto general */
+  --color-texto-secundario: #B0C4DE; /* texto más sutil */
+  --color-texto-terciario: #2B6CB0; /* reemplaza al azul claro */
+  --color-texto-titulo: #E3F2FD; /* títulos destacados */
+  --color-texto-titulo-secundario: #CCCCCC; /* texto menos enfático */
+  --color-foco: #ffbf47;
 }
+
 
 
 @media (max-width: 576px) {

@@ -1,9 +1,5 @@
 .hero-section {
-  background: linear-gradient(
-    270deg,
-    rgba(43, 108, 176, 1) 0%,
-    rgba(30, 78, 140, 1) 100%
-  );
+  background: var(--color-fondo-hero);
   padding: 40px 20px;
   color: var(--color-texto-primario);
 }
@@ -22,13 +18,13 @@
 
 .btn-map {
   background-color: var(--color-texto-primario);
-  color: var(--color-fondo-secundario);
+  color: var(--color-texto-terciario);
   border: none;
 }
 
 .btn-map:hover {
   background-color: #f0f0f0;
-  color: var(--color-fondo-secundario);
+  color: var(--color-texto-terciario);
 }
 
 .btn-map:focus-visible {
@@ -52,6 +48,13 @@
   outline-offset: 3px;
 }
 
+.section-card {
+  background-color: var(--color-fondo-card);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* Iconos dentro de botones */
 .btn-map img,
 .btn-report img {
@@ -60,7 +63,7 @@
 }
 
 .card-link-text {
-  color: var(--color-fondo-secundario);
+  color: var(--color-texto-terciario);
   position: relative;
   transition: color 0.3s ease;
 }
@@ -72,7 +75,7 @@
   bottom: -2px;
   height: 2px;
   width: 0%;
-  background-color: var(--color-fondo-secundario);
+  background-color: var(--color-texto-terciario);
   transition: width 0.3s ease;
 }
 

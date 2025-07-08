@@ -6,7 +6,7 @@
 
 .navbar-nav .nav-link {
   position: relative;
-  color: var(--color-fondo); /* o #2b6cb0 */
+  color: var(--color-texto-primario); /* o #2b6cb0 */
   font-weight: 600;
   transition: color 0.3s ease;
   text-decoration: none;

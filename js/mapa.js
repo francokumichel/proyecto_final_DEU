@@ -66,19 +66,58 @@ function getColor(risk) {
       "#28a745";
 }
 
-var patternAlto = new L.StripePattern({ weight: 4, spaceColor: '#fff', color: '#dc3545', spaceOpacity: 0.6, angle: 45 });
+let ayudasVisuales = false;
+
+// Modifica la función de estilo de cada capa para usar fillPattern solo si ayudasVisuales está activo
+function getStyle(feature) {
+  const risk = feature.properties.risk;
+  if (risk === "alto") {
+    return {
+      fillPattern: ayudasVisuales ? patternAlto : undefined,
+      fillColor: ayudasVisuales ? undefined : 'rgba(220,53,69,0.4)', // rojo translúcido
+      color: '#dc3545', // borde rojo
+      fillOpacity: 0.5,
+      weight: 3,
+      dashArray: '24,14', // rayado ancho para alto riesgo
+    };
+  }
+  if (risk === "medio") {
+    return {
+      fillPattern: ayudasVisuales ? patternMedio : undefined,
+      fillColor: ayudasVisuales ? undefined : 'rgba(255,193,7,0.4)', // amarillo translúcido
+      color: '#ff9900', // borde naranja
+      fillOpacity: 0.5,
+      weight: 3,
+      dashArray: '4,4', // borde punteado
+    };
+  }
+  // Bajo riesgo
+  return {
+    fillPattern: ayudasVisuales ? patternBajo : undefined,
+    fillColor: ayudasVisuales ? undefined : 'rgba(40,167,69,0.4)', // verde translúcido
+    color: '#28a745', // borde verde
+    fillOpacity: 0.5,
+    weight: 3,
+    dashArray: '', // borde sólido
+  };
+}
+
+
+var patternAlto = new L.StripePattern({ weight: 4, spaceColor: '#fff', color: 'rgba(220, 53, 69, 0.4)', spaceOpacity: 0.6, angle: 45 });
 patternAlto.addTo(map);
 
-var patternMedio = new L.StripePattern({ weight: 4, spaceColor: '#fff', color: '#ffc107', spaceOpacity: 0.6, angle: -45 });
+var patternMedio = new L.StripePattern({ weight: 4, spaceColor: '#fff', color: 'rgba(255, 193, 7, 0.4)', spaceOpacity: 0.6, angle: -45 });
 patternMedio.addTo(map);
 
 var shape = new L.PatternCircle({
-  x: 12,
-  y: 12,
-  radius: 5,
-  fill: false
+  x: 7.5,
+  y: 7.5,
+  radius: 6,
+  fill: false,
+  color: "rgba(40, 167, 69, 0.4)",       // Borde transparente
+  fillColor: "rgba(40, 167, 69, 0.4)",   // Relleno transparente
 });
-var patternBajo = new L.Pattern({ radius: 3, color: '#28a745', fillColor: '#28a745', spaceColor: '#fff', width: 15, height: 15 });
+var patternBajo = new L.Pattern({ width: 15, height: 15 });
 patternBajo.addShape(shape);
 patternBajo.addTo(map);
 
@@ -86,11 +125,10 @@ var geojsonLayers = {
   alto: L.geoJSON(geojsonData, {
     style: function(feature) {
       return {
-        fillPattern: patternAlto,
+        fillPattern: ayudasVisuales ? patternAlto : undefined,
         color: getColor(feature.properties.risk),
-        fillOpacity: 0.5,
         weight: 3,
-        dashArray: '10,6', // Borde rayado para alto riesgo
+        dashArray: '30,18', // Borde rayado para alto riesgo
       };
     },
     filter: (feature) => feature.properties.risk === "alto"
@@ -99,8 +137,8 @@ var geojsonLayers = {
     style: function(feature) {
       return {
         fillPattern: patternMedio,
-        color: getColor(feature.properties.risk),
-        fillOpacity: 0.5,
+        // color: getColor(feature.properties.risk),
+        color: '#8c5206',
         weight: 3,
         dashArray: '4,4', // Borde punteado para riesgo medio
       };
@@ -112,9 +150,9 @@ var geojsonLayers = {
       return {
         fillPattern: patternBajo,
         color: getColor(feature.properties.risk),
-        fillOpacity: 0.5,
         weight: 3,
-        dashArray: '', // Borde sólido para riesgo bajo
+        fillOpacity: 0.2,
+        //dashArray: '', // Borde sólido para riesgo bajo
       };
     },
     filter: (feature) => feature.properties.risk === "bajo"
@@ -165,6 +203,10 @@ function initLayers() {
 
 // 4. Función de filtrado
 function applyFilters() {
+  geojsonLayers.alto.setStyle(getStyle);
+  geojsonLayers.medio.setStyle(getStyle);
+  geojsonLayers.bajo.setStyle(getStyle);
+
   // Zonas
   geojsonLayers.alto.setStyle({
     fillOpacity: document.getElementById("alto-riesgo").checked ? 0.5 : 0,
@@ -192,6 +234,14 @@ function applyFilters() {
     ? map.addLayer(markerLayers["centros-asistencia"])
     : map.removeLayer(markerLayers["centros-asistencia"]);
 }
+
+// Lógica para el botón de ayudas visuales:
+document.getElementById("toggle-ayudas").addEventListener("click", function() {
+  ayudasVisuales = !ayudasVisuales;
+  this.setAttribute('aria-pressed', ayudasVisuales);
+  this.textContent = ayudasVisuales ? "Ocultar ayudas visuales" : "Mostrar ayudas visuales";
+  applyFilters();
+});
 
 // Inicialización
 document.addEventListener("DOMContentLoaded", function() {

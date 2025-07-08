@@ -123,39 +123,45 @@ patternBajo.addTo(map);
 
 var geojsonLayers = {
   alto: L.geoJSON(geojsonData, {
-    style: function(feature) {
-      return {
-        fillPattern: ayudasVisuales ? patternAlto : undefined,
-        color: getColor(feature.properties.risk),
-        weight: 3,
-        dashArray: '30,18', // Borde rayado para alto riesgo
-      };
-    },
-    filter: (feature) => feature.properties.risk === "alto"
+    style: getStyle,
+    filter: f => f.properties.risk === "alto",
+    // style: function(feature) {
+    //   return {
+    //     fillPattern: ayudasVisuales ? patternAlto : undefined,
+    //     color: getColor(feature.properties.risk),
+    //     weight: 3,
+    //     dashArray: '30,18', // Borde rayado para alto riesgo
+    //   };
+    // },
+    // filter: (feature) => feature.properties.risk === "alto"
   }),
   medio: L.geoJSON(geojsonData, {
-    style: function(feature) {
-      return {
-        fillPattern: patternMedio,
-        // color: getColor(feature.properties.risk),
-        color: '#8c5206',
-        weight: 3,
-        dashArray: '4,4', // Borde punteado para riesgo medio
-      };
-    },
-    filter: (feature) => feature.properties.risk === "medio"
+    style: getStyle,
+    filter: f => f.properties.risk == "medio",
+    // style: function(feature) {
+    //   return {
+    //     fillPattern: patternMedio,
+    //     // color: getColor(feature.properties.risk),
+    //     color: '#8c5206',
+    //     weight: 3,
+    //     dashArray: '4,4', // Borde punteado para riesgo medio
+    //   };
+    // },
+    // filter: (feature) => feature.properties.risk === "medio"
   }),
   bajo: L.geoJSON(geojsonData, {
-    style: function(feature) {
-      return {
-        fillPattern: patternBajo,
-        color: getColor(feature.properties.risk),
-        weight: 3,
-        fillOpacity: 0.2,
-        //dashArray: '', // Borde sólido para riesgo bajo
-      };
-    },
-    filter: (feature) => feature.properties.risk === "bajo"
+    style: getStyle,
+    filter: f => f.properties.risk == "bajo",
+    // style: function(feature) {
+    //   return {
+    //     fillPattern: patternBajo,
+    //     color: getColor(feature.properties.risk),
+    //     weight: 3,
+    //     fillOpacity: 0.2,
+    //     //dashArray: '', // Borde sólido para riesgo bajo
+    //   };
+    // },
+    // filter: (feature) => feature.properties.risk === "bajo"
   })
 };
 

@@ -2,3 +2,8 @@
   font-size: 32px;
   color: indigo;
 }
+
+.texto-descripcion {
+  color: var(--color-texto-titulo-secundario);
+  font-size: 1.125rem;
+}

@@ -94,7 +94,14 @@ img {
     max-width: 100%;
     height: auto;
     display: block;
-}  
+}
+
+.titulo-principal {
+    color: var(--color-texto-titulo-secundario);
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
 
 /* Bootstrap overrides opcionales */
 .btn:focus-visible {
@@ -155,7 +162,7 @@ body.dark-mode {
   --color-texto-secundario: #B0C4DE; /* texto más sutil */
   --color-texto-terciario: #2B6CB0; /* reemplaza al azul claro */
   --color-texto-titulo: #E3F2FD; /* títulos destacados */
-  --color-texto-titulo-secundario: #CCCCCC; /* texto menos enfático */
+  --color-texto-titulo-secundario: #FFFFFF; /* texto menos enfático */
   --color-foco: #ffbf47;
 }
 

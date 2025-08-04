@@ -78,12 +78,10 @@
     <script src="js/navbar-component.js" defer></script>
   </head>
   <body>
-    <!-- Header with navigation -->
     <header>
       <navbar-component></navbar-component>
     </header>
 
-    <!-- Main content -->
     <main class="container-fluid p-3">
       <header>
         <h1 class="titulo-principal">Mapa Interactivo: La Plata y alrededores</h1>
@@ -92,7 +90,6 @@
         </p>
       </header>
 
-      <!-- Toggle buttons for filters and legend -->
       <div
         class="toggle-controls"
         role="group"
@@ -102,9 +99,9 @@
           class="toggle-button btn btn-outline-primary"
           id="toggle-filters"
           aria-label="Mostrar u ocultar panel de filtros"
-          aria-expanded="true"
+          aria-expanded="false"
         >
-          <i class="bi bi-funnel"></i> Ocultar Filtros
+          <i class="bi bi-funnel"></i> Mostrar Filtros
         </button>
         <button
           class="toggle-button btn btn-outline-primary"
@@ -126,7 +123,7 @@
 
       <section class="map-container">
         <aside
-          class="filter-panel card p-3"
+          class="filter-panel card p-3 panel-hidden"
           role="region"
           aria-label="Panel de filtros"
         >
@@ -269,7 +266,6 @@
       </section>
     </main>
 
-    <!-- Footer -->
     <footer>
       <footer-component></footer-component>
     </footer>
@@ -304,7 +300,6 @@
         });
     </script>
 
-    <!-- Toast para notificación de ayudas visuales -->
     <div
       class="toast-container position-fixed top-0 end-0 p-3"
       aria-live="polite"
@@ -315,8 +310,7 @@
         id="ayudasToast"
         role="alert"
         aria-label="Notificación de ayudas visuales"
-        data-bs-autohide="true"
-        data-bs-delay="5000"
+        data-bs-autohide="false"
       >
         <div class="toast-header bg-primary text-white">
           <i class="bi bi-eye me-2"></i>

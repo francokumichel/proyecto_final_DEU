@@ -1,15 +1,14 @@
 // Configuración inicial del mapa
 var map = L.map("map", {
   zoomControl: false
-}).setView([-34.92, -57.95], 13);
+}).setView([-34.92, -57.95], 14);
 
 // Agregamos el control de zoom manualmente en la posición deseada
 L.control.zoom({
   position: 'topright'
 }).addTo(map);
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, className: 'map-tiles' }).addTo(map);
-
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
 
 // 1. Zonas de riesgo
 var geojsonData = {

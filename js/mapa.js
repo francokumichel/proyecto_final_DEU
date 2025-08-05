@@ -14,50 +14,14 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19,
 // 1. Zonas de riesgo
 var geojsonData = {
   type: "FeatureCollection",
-  features: [
-    {
-      type: "Feature",
-      properties: { risk: "bajo" },
-      geometry: {
-        type: "Polygon",
-        coordinates: [[
-          [-57.981000, -34.936800], // oeste-noroeste (cerca de Tolosa)
-          [-57.962500, -34.936800], // noreste
-          [-57.962500, -34.917000], // sureste
-          [-57.981000, -34.917000], // suroeste
-          [-57.981000, -34.936800]
-        ]]
-      }
-    },
-    {
-      type: "Feature",
-      properties: { risk: "alto" },
-      geometry: {
-        type: "Polygon",
-        coordinates: [[
-          [-57.958000, -34.931800], // zona centro
-          [-57.940000, -34.931800],
-          [-57.940000, -34.911800],
-          [-57.958000, -34.911800],
-          [-57.958000, -34.931800]
-        ]]
-      }
-    },
-    {
-      type: "Feature",
-      properties: { risk: "medio" },
-      geometry: {
-        type: "Polygon",
-        coordinates: [[
-          [-57.938500, -34.925000], // zona este, cerca de Av. 13 y Plaza Matheu
-          [-57.917000, -34.925000],
-          [-57.917000, -34.904500],
-          [-57.938500, -34.904500],
-          [-57.938500, -34.925000]
-        ]]
-      }
-    },
-  ]
+  features: zonasInundables.map(zona => ({
+    type: "Feature",
+    properties: { risk: zona.risk, barrio: zona.barrio },
+    geometry: {
+      type: "Polygon",
+      coordinates: [zona.coordinates]
+    }
+  }))
 };
 
 function getColor(risk) {
@@ -137,21 +101,24 @@ var geojsonLayers = {
 };
 
 geojsonLayers.alto.on('click', function(e) {
+  const barrio = e.layer.feature.properties.barrio;
   L.popup()
     .setLatLng(e.latlng)
-    .setContent('Zona de riesgo alto')
+    .setContent('Zona de riesgo alto: ' + barrio)
     .openOn(map);
 });
 geojsonLayers.medio.on('click', function(e) {
+  const barrio = e.layer.feature.properties.barrio;
   L.popup()
     .setLatLng(e.latlng)
-    .setContent('Zona de riesgo medio')
+    .setContent('Zona de riesgo medio: ' + barrio)
     .openOn(map);
 });
 geojsonLayers.bajo.on('click', function(e) {
+  const barrio = e.layer.feature.properties.barrio;
   L.popup()
     .setLatLng(e.latlng)
-    .setContent('Zona de riesgo bajo')
+    .setContent('Zona de riesgo bajo: ' + barrio)
     .openOn(map);
 });
 
@@ -164,17 +131,21 @@ var markerLayers = {
   "centros-asistencia": L.layerGroup()
 };
 
-[
-  { type: "refugios", coords: [-34.934185, -57.969457], icon: "house", popup: "Parque Juan Vucetich" },
-  { type: "refugios", coords: [-34.9251, -57.9582], icon: "house", popup: "Refugio - Club Vecinal" },
-  { type: "centros-asistencia", coords: [-34.923960, -57.936876], icon: "plus-square", popup: "Centro de Salud - Reencuentro" },
-  { type: "centros-asistencia", coords: [-34.924029, -57.975154], icon: "plus-square", popup: "Centro de Salud - Salita" },
-  { type: "puntos-encuentro", coords: [-34.920216, -57.929031], icon: "geo-alt", popup: "Punto de Encuentro - Plaza Matheu" },
-  { type: "puntos-encuentro", coords: [-34.915430, -57.947785], icon: "geo-alt", popup: "Punto de Encuentro - Parque San Martín" }
-].forEach(m => {
+marcadoresMapa.forEach(m => {
+  // Mapea el tipo al grupo correspondiente
+  let tipoGrupo = m.tipo === "refugio" ? "refugios" :
+    m.tipo === "punto-encuentro" ? "puntos-encuentro" :
+      m.tipo === "centro-asistencia" ? "centros-asistencia" : null;
+  if (!tipoGrupo) return;
+
   L.marker(m.coords, {
-    icon: L.divIcon({ className: "bi", html: `<i class="bi bi-${m.icon}"></i>` })
-  }).bindPopup(m.popup).addTo(markerLayers[m.type]);
+    icon: L.divIcon({
+      className: "bi", html: `<i class="bi bi-${m.tipo === "refugio" ? "house" :
+        m.tipo === "punto-encuentro" ? "geo-alt" :
+          m.tipo === "centro-asistencia" ? "plus-square" : ""
+        }"></i>`
+    })
+  }).bindPopup(m.nombre).addTo(markerLayers[tipoGrupo]);
 });
 
 // 3. Añadir capas al mapa

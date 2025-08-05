@@ -71,6 +71,7 @@
             <h2 id="suscripcion-titulo" class="h5 text-success mb-3">
               Suscribite para recibir alertas
             </h2>
+            <!-- ... dentro del formulario de suscripción ... -->
             <form class="mb-4" id="suscripcion-formulario" autocomplete="off">
               <div class="mb-3">
                 <label for="suscripcion-email" class="form-label">Email</label>
@@ -116,7 +117,9 @@
                   aria-label="Seleccioná medio de notificación"
                   required
                 >
-                  <option value="">Seleccionar...</option>
+                  <option value="" disabled hidden selected>
+                    Seleccionar...
+                  </option>
                   <option value="Email">Email</option>
                   <option value="WhatsApp">WhatsApp</option>
                   <option value="Push">Notificación Push</option>

@@ -69,7 +69,7 @@ function mostrarAlertasActivas() {
       <article tabindex="0" aria-label="${alerta.titulo}">
         <div class="d-flex align-items-center mb-1">
           ${badgeNivel(alerta.nivel)}
-          <h2 class="h6 text-danger ms-2 mb-0">${alerta.titulo}</h2>
+          <h2 class="h6 ms-2 mb-0">${alerta.titulo}</h2>
         </div>
         <time datetime="${alerta.fecha}" class="d-block mb-1 text-muted">${formatearFecha(alerta.fecha)}</time>
         <p class="mb-1">${alerta.descripcion}</p>
@@ -95,7 +95,7 @@ function mostrarHistorialAlertas(pagina) {
       <article tabindex="0" aria-label="${alerta.titulo}">
         <div class="d-flex align-items-center mb-1">
           ${badgeNivel(alerta.nivel)}
-          <h2 class="h6 text-primary ms-2 mb-0">${alerta.titulo}</h2>
+          <h2 class="h6 ms-2 mb-0">${alerta.titulo}</h2>
         </div>
         <time datetime="${alerta.fecha}" class="d-block mb-1 text-muted">${formatearFecha(alerta.fecha)}</time>
         <p class="mb-1">${alerta.descripcion}</p>

@@ -231,6 +231,42 @@ function applyFilters() {
   document.getElementById("centros-asistencia").checked
     ? map.addLayer(markerLayers["centros-asistencia"])
     : map.removeLayer(markerLayers["centros-asistencia"]);
+
+  // --- Listado accesible de datos filtrados ---
+  const datosFiltrados = [];
+
+  // Zonas de riesgo
+  if (document.getElementById("alto-riesgo").checked) {
+    datosFiltrados.push({ tipo: "Zona Inundable", riesgo: "Alto", descripcion: "Zona de riesgo alto" });
+  }
+  if (document.getElementById("riesgo-medio").checked) {
+    datosFiltrados.push({ tipo: "Zona Inundable", riesgo: "Medio", descripcion: "Zona de riesgo medio" });
+  }
+  if (document.getElementById("riesgo-bajo").checked) {
+    datosFiltrados.push({ tipo: "Zona Inundable", riesgo: "Bajo", descripcion: "Zona de riesgo bajo" });
+  }
+
+  // Marcadores
+  if (document.getElementById("refugios").checked) {
+    datosFiltrados.push(
+      { tipo: "Refugio", nombre: "Parque Juan Vucetich", descripcion: "Refugio en Parque Juan Vucetich" },
+      { tipo: "Refugio", nombre: "Refugio - Club Vecinal", descripcion: "Refugio en Club Vecinal" }
+    );
+  }
+  if (document.getElementById("centros-asistencia").checked) {
+    datosFiltrados.push(
+      { tipo: "Centro de Asistencia", nombre: "Centro de Salud - Reencuentro", descripcion: "Centro de Salud - Reencuentro" },
+      { tipo: "Centro de Asistencia", nombre: "Centro de Salud - Salita", descripcion: "Centro de Salud - Salita" }
+    );
+  }
+  if (document.getElementById("puntos-encuentro").checked) {
+    datosFiltrados.push(
+      { tipo: "Punto de Encuentro", nombre: "Plaza Matheu", descripcion: "Punto de Encuentro - Plaza Matheu" },
+      { tipo: "Punto de Encuentro", nombre: "Parque San Martín", descripcion: "Punto de Encuentro - Parque San Martín" }
+    );
+  }
+
+  mostrarListadoFiltrado(datosFiltrados);
 }
 
 // Lógica para el botón de ayudas visuales:
@@ -263,4 +299,22 @@ document.addEventListener("DOMContentLoaded", function() {
 function resetFilters() {
   document.querySelectorAll(".form-check-input").forEach(cb => cb.checked = true);
   applyFilters();
+}
+
+function mostrarListadoFiltrado(datosFiltrados) {
+  const contenedor = document.getElementById('listado-filtrado');
+  contenedor.innerHTML = ''; // Limpia el listado anterior
+  if (datosFiltrados.length === 0) {
+    contenedor.textContent = 'No se encontraron datos filtrados.';
+    return;
+  }
+  const ul = document.createElement('ul');
+  datosFiltrados.forEach(dato => {
+    const li = document.createElement('li');
+    li.textContent =
+      (dato.tipo ? dato.tipo + ": " : "") +
+      (dato.nombre ? dato.nombre : dato.descripcion);
+    ul.appendChild(li);
+  });
+  contenedor.appendChild(ul);
 }

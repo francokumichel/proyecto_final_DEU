@@ -176,7 +176,7 @@ function applyFilters() {
   geojsonLayers.medio.setStyle(getStyle);
   geojsonLayers.bajo.setStyle(getStyle);
 
-  // Zonas
+  // Zonas de riesgo (mapa)
   geojsonLayers.alto.setStyle({
     fillOpacity: document.getElementById("alto-riesgo").checked ? 0.5 : 0,
     weight: document.getElementById("alto-riesgo").checked ? 1 : 0
@@ -190,7 +190,7 @@ function applyFilters() {
     weight: document.getElementById("riesgo-bajo").checked ? 1 : 0
   });
 
-  // Marcadores
+  // Marcadores (mapa)
   document.getElementById("refugios").checked
     ? map.addLayer(markerLayers.refugios)
     : map.removeLayer(markerLayers.refugios);
@@ -203,21 +203,26 @@ function applyFilters() {
     ? map.addLayer(markerLayers["centros-asistencia"])
     : map.removeLayer(markerLayers["centros-asistencia"]);
 
-  // --- Listado accesible de datos filtrados ---
+  // --- Listado accesible filtrado ---
   const datosFiltrados = [];
 
-  // Zonas de riesgo
-  if (document.getElementById("alto-riesgo").checked) {
-    datosFiltrados.push({ tipo: "Zona Inundable", riesgo: "Alto", descripcion: "Zona de riesgo alto" });
-  }
-  if (document.getElementById("riesgo-medio").checked) {
-    datosFiltrados.push({ tipo: "Zona Inundable", riesgo: "Medio", descripcion: "Zona de riesgo medio" });
-  }
-  if (document.getElementById("riesgo-bajo").checked) {
-    datosFiltrados.push({ tipo: "Zona Inundable", riesgo: "Bajo", descripcion: "Zona de riesgo bajo" });
-  }
+  // 1️⃣ Zonas de riesgo (usar zonas reales)
+  zonasInundables.forEach(z => {
+    if (
+      (z.risk === "alto" && document.getElementById("alto-riesgo").checked) ||
+      (z.risk === "medio" && document.getElementById("riesgo-medio").checked) ||
+      (z.risk === "bajo" && document.getElementById("riesgo-bajo").checked)
+    ) {
+      datosFiltrados.push({
+        tipo: "Zona Inundable",
+        riesgo: z.risk.charAt(0).toUpperCase() + z.risk.slice(1),
+        barrio: z.barrio,
+        descripcion: `Zona de riesgo ${z.risk}`
+      });
+    }
+  });
 
-  // Marcadores
+  // 2️⃣ Marcadores
   if (document.getElementById("refugios").checked) {
     datosFiltrados.push(
       { tipo: "Refugio", nombre: "Parque Juan Vucetich", descripcion: "Refugio en Parque Juan Vucetich" },
@@ -272,20 +277,59 @@ function resetFilters() {
   applyFilters();
 }
 
+
 function mostrarListadoFiltrado(datosFiltrados) {
   const contenedor = document.getElementById('listado-filtrado');
-  contenedor.innerHTML = ''; // Limpia el listado anterior
+  contenedor.innerHTML = '';
+
   if (datosFiltrados.length === 0) {
     contenedor.textContent = 'No se encontraron datos filtrados.';
     return;
   }
-  const ul = document.createElement('ul');
-  datosFiltrados.forEach(dato => {
-    const li = document.createElement('li');
-    li.textContent =
-      (dato.tipo ? dato.tipo + ": " : "") +
-      (dato.nombre ? dato.nombre : dato.descripcion);
-    ul.appendChild(li);
+
+  // Secciones zonas de riesgo
+  const riesgos = ['Alto', 'Medio', 'Bajo'];
+  riesgos.forEach(riesgo => {
+    const zonas = datosFiltrados.filter(d => d.tipo === 'Zona Inundable' && d.riesgo === riesgo);
+    if (zonas.length > 0) {
+      const h = document.createElement('h3');
+      h.textContent = `Zonas de Riesgo ${riesgo}`;
+      contenedor.appendChild(h);
+
+      const ul = document.createElement('ul');
+      zonas.forEach(zona => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>Barrio:</strong> ${zona.barrio}<br>
+                        <strong>Descripción:</strong> ${zona.descripcion}`;
+        ul.appendChild(li);
+      });
+      contenedor.appendChild(ul);
+    }
   });
-  contenedor.appendChild(ul);
+
+  // Secciones marcadores
+  const nombreSeccion = {
+    'Refugio': 'Refugios',
+    'Centro de Asistencia': 'Centros de Asistencia',
+    'Punto de Encuentro': 'Puntos de Encuentro'
+  };
+
+  const tiposMarcadores = ['Refugio', 'Centro de Asistencia', 'Punto de Encuentro'];
+  tiposMarcadores.forEach(tipo => {
+    const marcadores = datosFiltrados.filter(d => d.tipo === tipo);
+    if (marcadores.length > 0) {
+      const h = document.createElement('h3');
+      h.textContent = nombreSeccion[tipo] ?? tipo;
+      contenedor.appendChild(h);
+
+      const ul = document.createElement('ul');
+      marcadores.forEach(marc => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>Nombre:</strong> ${marc.nombre}<br>
+                        <strong>Descripción:</strong> ${marc.descripcion}`;
+        ul.appendChild(li);
+      });
+      contenedor.appendChild(ul);
+    }
+  });
 }

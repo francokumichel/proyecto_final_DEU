@@ -27,6 +27,7 @@
     --color-texto-terciario: #2B6CB0;
     --color-texto-titulo: #1E4E8C;
     --color-texto-titulo-secundario: #000000;
+    --color-texto-label: #000000;
     --color-foco: #ffbf47;
     --color-fondo-terciario-hover: #d98206;
     --fuente-base: 'Montserrat', sans-serif;
@@ -98,9 +99,13 @@ img {
 
 .titulo-principal {
     color: var(--color-texto-titulo-secundario);
-    text-align: center;
     margin-bottom: 1rem;
     font-weight: bold;
+}
+
+.texto-descripcion {
+  color: var(--color-texto-titulo-secundario);
+  font-size: 1.125rem;
 }
 
 /* Bootstrap overrides opcionales */
@@ -161,6 +166,7 @@ body.dark-mode {
   --color-texto-primario: #FFFFFF; /* texto general */
   --color-texto-secundario: #B0C4DE; /* texto más sutil */
   --color-texto-terciario: #2B6CB0; /* reemplaza al azul claro */
+  --color-texto-label: #FFFFFF;
   --color-texto-titulo: #E3F2FD; /* títulos destacados */
   --color-texto-titulo-secundario: #FFFFFF; /* texto menos enfático */
   --color-foco: #ffbf47;

@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         .bi i {
           font-size: 32px;
-          color: red;
+          color: white;
         }
       `;
       document.head.appendChild(styleElement);

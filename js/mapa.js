@@ -3,60 +3,23 @@ var map = L.map("map", {
   zoomControl: false
 }).setView([-34.92, -57.95], 14);
 
-// Agregamos el control de zoom manualmente en la posición deseada
 L.control.zoom({
   position: 'topright'
 }).addTo(map);
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, className: 'map-tiles' }).addTo(map);
 
 // 1. Zonas de riesgo
 var geojsonData = {
   type: "FeatureCollection",
-  features: [
-    {
-      type: "Feature",
-      properties: { risk: "bajo" },
-      geometry: {
-        type: "Polygon",
-        coordinates: [[
-          [-57.981000, -34.936800], // oeste-noroeste (cerca de Tolosa)
-          [-57.962500, -34.936800], // noreste
-          [-57.962500, -34.917000], // sureste
-          [-57.981000, -34.917000], // suroeste
-          [-57.981000, -34.936800]
-        ]]
-      }
-    },
-    {
-      type: "Feature",
-      properties: { risk: "alto" },
-      geometry: {
-        type: "Polygon",
-        coordinates: [[
-          [-57.958000, -34.931800], // zona centro
-          [-57.940000, -34.931800],
-          [-57.940000, -34.911800],
-          [-57.958000, -34.911800],
-          [-57.958000, -34.931800]
-        ]]
-      }
-    },
-    {
-      type: "Feature",
-      properties: { risk: "medio" },
-      geometry: {
-        type: "Polygon",
-        coordinates: [[
-          [-57.938500, -34.925000], // zona este, cerca de Av. 13 y Plaza Matheu
-          [-57.917000, -34.925000],
-          [-57.917000, -34.904500],
-          [-57.938500, -34.904500],
-          [-57.938500, -34.925000]
-        ]]
-      }
-    },
-  ]
+  features: zonasInundables.map(zona => ({
+    type: "Feature",
+    properties: { risk: zona.risk, barrio: zona.barrio },
+    geometry: {
+      type: "Polygon",
+      coordinates: [zona.coordinates]
+    }
+  }))
 };
 
 function getColor(risk) {
@@ -67,40 +30,37 @@ function getColor(risk) {
 
 let ayudasVisuales = false;
 
-// Modifica la función de estilo de cada capa para usar fillPattern solo si ayudasVisuales está activo
 function getStyle(feature) {
   const risk = feature.properties.risk;
   if (risk === "alto") {
     return {
       fillPattern: ayudasVisuales ? patternAlto : undefined,
-      fillColor: ayudasVisuales ? undefined : 'rgba(220,53,69,0.4)', // rojo translúcido
-      color: '#dc3545', // borde rojo
+      fillColor: ayudasVisuales ? undefined : 'rgba(220,53,69,0.4)',
+      color: '#dc3545',
       fillOpacity: 0.5,
       weight: 3,
-      dashArray: '24,14', // rayado ancho para alto riesgo
+      dashArray: '24,14',
     };
   }
   if (risk === "medio") {
     return {
       fillPattern: ayudasVisuales ? patternMedio : undefined,
-      fillColor: ayudasVisuales ? undefined : 'rgba(255,193,7,0.4)', // amarillo translúcido
-      color: '#ff9900', // borde naranja
+      fillColor: ayudasVisuales ? undefined : 'rgba(255,193,7,0.4)',
+      color: '#ff9900',
       fillOpacity: 0.5,
       weight: 3,
-      dashArray: '4,4', // borde punteado
+      dashArray: '4,4',
     };
   }
-  // Bajo riesgo
   return {
     fillPattern: ayudasVisuales ? patternBajo : undefined,
-    fillColor: ayudasVisuales ? undefined : 'rgba(40,167,69,0.4)', // verde translúcido
-    color: '#28a745', // borde verde
+    fillColor: ayudasVisuales ? undefined : 'rgba(40,167,69,0.4)',
+    color: '#28a745',
     fillOpacity: 0.5,
     weight: 3,
-    dashArray: '', // borde sólido
+    dashArray: '',
   };
 }
-
 
 var patternAlto = new L.StripePattern({ weight: 4, spaceColor: '#fff', color: 'rgba(220, 53, 69, 0.4)', spaceOpacity: 0.6, angle: 45 });
 patternAlto.addTo(map);
@@ -113,72 +73,57 @@ var shape = new L.PatternCircle({
   y: 7.5,
   radius: 6,
   fill: false,
-  color: "rgba(40, 167, 69, 0.4)",       // Borde transparente
-  fillColor: "rgba(40, 167, 69, 0.4)",   // Relleno transparente
+  color: "rgba(40, 167, 69, 0.4)",
+  fillColor: "rgba(40, 167, 69, 0.4)",
 });
 var patternBajo = new L.Pattern({ width: 15, height: 15 });
 patternBajo.addShape(shape);
 patternBajo.addTo(map);
 
 var geojsonLayers = {
-  alto: L.geoJSON(geojsonData, {
-    style: getStyle,
-    filter: f => f.properties.risk === "alto",
-  }),
-  medio: L.geoJSON(geojsonData, {
-    style: getStyle,
-    filter: f => f.properties.risk == "medio",
-  }),
-  bajo: L.geoJSON(geojsonData, {
-    style: getStyle,
-    filter: f => f.properties.risk == "bajo",
-  })
+  alto: L.geoJSON(geojsonData, { style: getStyle, filter: f => f.properties.risk === "alto" }),
+  medio: L.geoJSON(geojsonData, { style: getStyle, filter: f => f.properties.risk === "medio" }),
+  bajo: L.geoJSON(geojsonData, { style: getStyle, filter: f => f.properties.risk === "bajo" })
 };
 
-geojsonLayers.alto.on('click', function(e) {
+geojsonLayers.alto.on('click', e => mostrarPopupZona(e, 'alto'));
+geojsonLayers.medio.on('click', e => mostrarPopupZona(e, 'medio'));
+geojsonLayers.bajo.on('click', e => mostrarPopupZona(e, 'bajo'));
+
+function mostrarPopupZona(e, riesgo) {
+  const barrio = e.layer.feature.properties.barrio;
   L.popup()
     .setLatLng(e.latlng)
-    .setContent('Zona de riesgo alto')
+    .setContent(`Zona de riesgo ${riesgo}: ${barrio}`)
     .openOn(map);
-});
-geojsonLayers.medio.on('click', function(e) {
-  L.popup()
-    .setLatLng(e.latlng)
-    .setContent('Zona de riesgo medio')
-    .openOn(map);
-});
-geojsonLayers.bajo.on('click', function(e) {
-  L.popup()
-    .setLatLng(e.latlng)
-    .setContent('Zona de riesgo bajo')
-    .openOn(map);
-});
+}
 
-
-
-// 2. Marcadores 
+// 2. Marcadores
 var markerLayers = {
   refugios: L.layerGroup(),
   "puntos-encuentro": L.layerGroup(),
   "centros-asistencia": L.layerGroup()
 };
 
-[
-  { type: "refugios", coords: [-34.934185, -57.969457], icon: "house", popup: "Parque Juan Vucetich" },
-  { type: "refugios", coords: [-34.9251, -57.9582], icon: "house", popup: "Refugio - Club Vecinal" },
-  { type: "centros-asistencia", coords: [-34.923960, -57.936876], icon: "plus-square", popup: "Centro de Salud - Reencuentro" },
-  { type: "centros-asistencia", coords: [-34.924029, -57.975154], icon: "plus-square", popup: "Centro de Salud - Salita" },
-  { type: "puntos-encuentro", coords: [-34.920216, -57.929031], icon: "geo-alt", popup: "Punto de Encuentro - Plaza Matheu" },
-  { type: "puntos-encuentro", coords: [-34.915430, -57.947785], icon: "geo-alt", popup: "Punto de Encuentro - Parque San Martín" }
-].forEach(m => {
+marcadoresMapa.forEach(m => {
+  let tipoGrupo = m.tipo === "refugio" ? "refugios" :
+    m.tipo === "punto-encuentro" ? "puntos-encuentro" :
+      m.tipo === "centro-asistencia" ? "centros-asistencia" : null;
+  if (!tipoGrupo) return;
+
   L.marker(m.coords, {
-    icon: L.divIcon({ className: "bi", html: `<i class="bi bi-${m.icon}"></i>` })
-  }).bindPopup(m.popup).addTo(markerLayers[m.type]);
+    icon: L.divIcon({
+      className: "bi",
+      html: `<i class="bi bi-${m.tipo === "refugio" ? "house" :
+        m.tipo === "punto-encuentro" ? "geo-alt" :
+          m.tipo === "centro-asistencia" ? "plus-square" : ""
+        }"></i>`
+    })
+  }).bindPopup(m.nombre).addTo(markerLayers[tipoGrupo]);
 });
 
 // 3. Añadir capas al mapa
 function initLayers() {
-  // Zonas de riesgo (mostrar/ocultar según checkbox)
   geojsonLayers.alto.addTo(map).setStyle({
     fillOpacity: document.getElementById("alto-riesgo").checked ? 0.5 : 0,
     weight: document.getElementById("alto-riesgo").checked ? 1 : 0
@@ -192,7 +137,6 @@ function initLayers() {
     weight: document.getElementById("riesgo-bajo").checked ? 1 : 0
   });
 
-  // Marcadores (mostrar/ocultar según checkbox)
   if (document.getElementById("refugios").checked) map.addLayer(markerLayers.refugios);
   if (document.getElementById("puntos-encuentro").checked) map.addLayer(markerLayers["puntos-encuentro"]);
   if (document.getElementById("centros-asistencia").checked) map.addLayer(markerLayers["centros-asistencia"]);
@@ -204,7 +148,6 @@ function applyFilters() {
   geojsonLayers.medio.setStyle(getStyle);
   geojsonLayers.bajo.setStyle(getStyle);
 
-  // Zonas
   geojsonLayers.alto.setStyle({
     fillOpacity: document.getElementById("alto-riesgo").checked ? 0.5 : 0,
     weight: document.getElementById("alto-riesgo").checked ? 1 : 0
@@ -218,7 +161,6 @@ function applyFilters() {
     weight: document.getElementById("riesgo-bajo").checked ? 1 : 0
   });
 
-  // Marcadores
   document.getElementById("refugios").checked
     ? map.addLayer(markerLayers.refugios)
     : map.removeLayer(markerLayers.refugios);
@@ -230,16 +172,44 @@ function applyFilters() {
   document.getElementById("centros-asistencia").checked
     ? map.addLayer(markerLayers["centros-asistencia"])
     : map.removeLayer(markerLayers["centros-asistencia"]);
+
+  // Listado accesible filtrado
+  const zonasFiltradas = zonasInundables.filter(z =>
+    (z.risk === "alto" && document.getElementById("alto-riesgo").checked) ||
+    (z.risk === "medio" && document.getElementById("riesgo-medio").checked) ||
+    (z.risk === "bajo" && document.getElementById("riesgo-bajo").checked)
+  );
+
+  const marcadoresFiltrados = [];
+  if (document.getElementById("refugios").checked) {
+    marcadoresFiltrados.push(
+      { tipo: "Refugio", nombre: "Parque Juan Vucetich", descripcion: "Refugio en Parque Juan Vucetich" },
+      { tipo: "Refugio", nombre: "Refugio - Club Vecinal", descripcion: "Refugio en Club Vecinal" }
+    );
+  }
+  if (document.getElementById("centros-asistencia").checked) {
+    marcadoresFiltrados.push(
+      { tipo: "Centro de Asistencia", nombre: "Centro de Salud - Reencuentro", descripcion: "Centro de Salud - Reencuentro" },
+      { tipo: "Centro de Asistencia", nombre: "Centro de Salud - Salita", descripcion: "Centro de Salud - Salita" }
+    );
+  }
+  if (document.getElementById("puntos-encuentro").checked) {
+    marcadoresFiltrados.push(
+      { tipo: "Punto de Encuentro", nombre: "Plaza Matheu", descripcion: "Punto de Encuentro - Plaza Matheu" },
+      { tipo: "Punto de Encuentro", nombre: "Parque San Martín", descripcion: "Punto de Encuentro - Parque San Martín" }
+    );
+  }
+
+  mostrarListadoFiltrado(zonasFiltradas, marcadoresFiltrados);
 }
 
-// Lógica para el botón de ayudas visuales:
+// Ayudas visuales
 document.getElementById("toggle-ayudas").addEventListener("click", function() {
   ayudasVisuales = !ayudasVisuales;
   this.setAttribute('aria-pressed', ayudasVisuales);
   this.textContent = ayudasVisuales ? "Ocultar ayudas visuales" : "Mostrar ayudas visuales";
   applyFilters();
 
-  // Mostrar el toast
   const toastEl = document.getElementById("ayudasToast");
   const toast = new bootstrap.Toast(toastEl);
   toastEl.querySelector(".toast-header strong").textContent = ayudasVisuales
@@ -252,14 +222,67 @@ document.getElementById("toggle-ayudas").addEventListener("click", function() {
 document.addEventListener("DOMContentLoaded", function() {
   initLayers();
   applyFilters();
-
-  // Event listeners
-  document.querySelectorAll(".form-check-input").forEach(cb => {
-    cb.addEventListener("change", applyFilters);
-  });
+  document.querySelectorAll(".form-check-input").forEach(cb => cb.addEventListener("change", applyFilters));
 });
 
 function resetFilters() {
   document.querySelectorAll(".form-check-input").forEach(cb => cb.checked = true);
   applyFilters();
 }
+
+// ✅ NUEVA FUNCIÓN LISTADO MEJORADO
+function mostrarListadoFiltrado(zonasFiltradas, marcadoresFiltrados) {
+  const contenedor = document.getElementById('listado-filtrado');
+  contenedor.innerHTML = '';
+
+  if (zonasFiltradas.length === 0 && marcadoresFiltrados.length === 0) {
+    contenedor.textContent = 'No se encontraron datos filtrados.';
+    return;
+  }
+
+  // Zonas de riesgo
+  const riesgos = ['alto', 'medio', 'bajo'];
+  const titulosZonas = { alto: 'Zonas de Riesgo Alto', medio: 'Zonas de Riesgo Medio', bajo: 'Zonas de Riesgo Bajo' };
+
+  riesgos.forEach(risk => {
+    const zonas = zonasFiltradas.filter(z => z.risk === risk);
+    if (zonas.length > 0) {
+      const h = document.createElement('h3');
+      h.textContent = titulosZonas[risk];
+      contenedor.appendChild(h);
+
+      const ul = document.createElement('ul');
+      zonas.forEach(z => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${z.barrio}</strong>`;
+        ul.appendChild(li);
+      });
+      contenedor.appendChild(ul);
+    }
+  });
+
+  // Marcadores
+  const nombreSeccion = {
+    'Refugio': 'Refugios',
+    'Centro de Asistencia': 'Centros de Asistencia',
+    'Punto de Encuentro': 'Puntos de Encuentro'
+  };
+
+  ['Refugio', 'Centro de Asistencia', 'Punto de Encuentro'].forEach(tipo => {
+    const marcadores = marcadoresFiltrados.filter(m => m.tipo === tipo);
+    if (marcadores.length > 0) {
+      const h = document.createElement('h3');
+      h.textContent = nombreSeccion[tipo] ?? tipo;
+      contenedor.appendChild(h);
+
+      const ul = document.createElement('ul');
+      marcadores.forEach(m => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>Nombre:</strong> ${m.nombre}<br><strong>Descripción:</strong> ${m.descripcion}`;
+        ul.appendChild(li);
+      });
+      contenedor.appendChild(ul);
+    }
+  });
+}
+

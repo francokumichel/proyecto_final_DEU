@@ -247,13 +247,23 @@ function mostrarListadoFiltrado(zonasFiltradas, marcadoresFiltrados) {
   riesgos.forEach(risk => {
     const zonas = zonasFiltradas.filter(z => z.risk === risk);
     if (zonas.length > 0) {
-      const h = document.createElement('h3');
-      h.textContent = titulosZonas[risk];
+      const h = document.createElement('h4');
+      h.classList.add('mt-4', 'mb-2', 'd-flex', 'align-items-center', 'gap-2', 'text-primary', 'fw-semibold');
+
+      let colorClass = {
+        alto: 'text-danger',
+        medio: 'text-warning',
+        bajo: 'text-success'
+      }[risk] ?? 'text-secondary';
+
+      h.innerHTML = `<span class="${colorClass}" aria-hidden="true">●</span> ${titulosZonas[risk]}`;
       contenedor.appendChild(h);
 
       const ul = document.createElement('ul');
       zonas.forEach(z => {
         const li = document.createElement('li');
+        li.classList.add('text-secondary', 'mb-1');
+        li.style.listStyleType = 'none';
         li.innerHTML = `<strong>${z.barrio}</strong>`;
         ul.appendChild(li);
       });
@@ -271,13 +281,23 @@ function mostrarListadoFiltrado(zonasFiltradas, marcadoresFiltrados) {
   ['Refugio', 'Centro de Asistencia', 'Punto de Encuentro'].forEach(tipo => {
     const marcadores = marcadoresFiltrados.filter(m => m.tipo === tipo);
     if (marcadores.length > 0) {
-      const h = document.createElement('h3');
-      h.textContent = nombreSeccion[tipo] ?? tipo;
+      const h = document.createElement('h4');
+      h.classList.add('mt-4', 'mb-2', 'd-flex', 'align-items-center', 'gap-2', 'text-primary', 'fw-semibold');
+
+      let iconClass = {
+        'Refugio': 'bi-house',
+        'Centro de Asistencia': 'bi-plus-square',
+        'Punto de Encuentro': 'bi-geo-alt'
+      }[tipo] ?? 'bi-question-circle';
+
+      h.innerHTML = `<span class="bi ${iconClass} text-primary" aria-hidden="true"></span> ${nombreSeccion[tipo] ?? tipo}`;
       contenedor.appendChild(h);
 
       const ul = document.createElement('ul');
       marcadores.forEach(m => {
         const li = document.createElement('li');
+        li.classList.add('text-secondary', 'mb-1');
+        li.style.listStyleType = 'none';
         li.innerHTML = `<strong>Nombre:</strong> ${m.nombre}<br><strong>Descripción:</strong> ${m.descripcion}`;
         ul.appendChild(li);
       });
